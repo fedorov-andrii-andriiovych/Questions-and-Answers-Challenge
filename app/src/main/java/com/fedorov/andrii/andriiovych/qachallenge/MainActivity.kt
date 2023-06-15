@@ -11,36 +11,47 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.fedorov.andrii.andriiovych.qachallenge.Screens.CategoryScreen
+import com.fedorov.andrii.andriiovych.qachallenge.Screens.HomeScreen
+import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackground
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.QAChallengeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val viewModel: MainViewModel = viewModel()
+            val navController = rememberNavController()
             QAChallengeTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = PrimaryBackground
                 ) {
-                    Greeting("Android")
+                    NavHost(navController = navController, startDestination = HOME_SCREEN) {
+                        composable(HOME_SCREEN) {
+                            HomeScreen(Modifier,viewModel, onClickType = {
+                                viewModel.typeState.value = it
+                                navController.navigate(CATEGORY_SCREEN)
+                            })
+                        }
+                        composable(CATEGORY_SCREEN) {
+                            CategoryScreen(Modifier,viewModel, onClickCategory = {
+                                viewModel.categoryState.value = it
+                                viewModel.getNewQuestionTrueFalse()
+                                navController.navigate(CATEGORY_SCREEN)
+                            })
+                        }
+                    }
                 }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String) {
-    val viewModel:MainViewModel = viewModel()
-
-    Text(text = "Hello ${viewModel.questionState.value.question}")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    QAChallengeTheme {
-        Greeting("Android")
+    companion object {
+        const val HOME_SCREEN = "homeScreen"
+        const val CATEGORY_SCREEN = "categoryScreen"
     }
 }

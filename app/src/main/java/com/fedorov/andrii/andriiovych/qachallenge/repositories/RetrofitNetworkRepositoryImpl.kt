@@ -7,8 +7,8 @@ import com.fedorov.andrii.andriiovych.qachallenge.network.RetrofitQuestionsClien
 class RetrofitNetworkRepositoryImpl(private val questionServices: QuestionServices = RetrofitQuestionsClient.create()) :
     NetworkRepository {
 
-    override suspend fun getNewQuestion(): QuestionModel {
-        val questionResponse = questionServices.getNewQuestion().results[0]
+    override suspend fun getNewQuestion(category: Int,difficulty: String ,type: String): QuestionModel {
+        val questionResponse = questionServices.getNewQuestion(category = category, difficulty = difficulty, type = type).results[0]
         return QuestionModel(
             category = questionResponse.category,
             type = questionResponse.type,

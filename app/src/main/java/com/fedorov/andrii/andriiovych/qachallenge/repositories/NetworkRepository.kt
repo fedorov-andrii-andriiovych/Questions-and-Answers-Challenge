@@ -4,6 +4,6 @@ import com.fedorov.andrii.andriiovych.qachallenge.model.QuestionModel
 
 interface NetworkRepository {
 
-   suspend fun getNewQuestion() : QuestionModel
+   suspend fun getNewQuestion(category: Int,difficulty: String ,type: String) : QuestionModel
 
 }

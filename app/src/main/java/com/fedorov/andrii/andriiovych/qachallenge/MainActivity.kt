@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: String) {
     val viewModel:MainViewModel = viewModel()
 
-    Text(text = "Hello ${viewModel.questionState.value?.question}")
+    Text(text = "Hello ${viewModel.questionState.value.question}")
 }
 
 @Preview(showBackground = true)

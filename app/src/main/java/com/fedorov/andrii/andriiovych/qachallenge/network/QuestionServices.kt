@@ -9,8 +9,8 @@ interface QuestionServices {
     @GET("api.php")
     suspend fun getNewQuestion(
         @Query("amount") amount: Int = 1,
-        @Query("category") category: Int = 27,
-        @Query("difficulty") difficulty: String = "easy",
-        @Query("type") type: String = "boolean"
+        @Query("category") category: Int ,
+        @Query("difficulty") difficulty: String = "",
+        @Query("type") type: String = ""
     ): QuestionResponse
 }

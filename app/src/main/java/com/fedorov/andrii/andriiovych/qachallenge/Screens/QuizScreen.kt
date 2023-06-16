@@ -9,8 +9,8 @@ import com.fedorov.andrii.andriiovych.qachallenge.QuestionType
 @Composable
 fun QuizScreen(mainViewModel: MainViewModel,modifier: Modifier) {
     when (mainViewModel.typeState.value) {
-        QuestionType.BOOLEAN -> BooleanQuizScreen()
-        QuestionType.MULTIPLE -> MultipleQuizScreen()
+        QuestionType.BOOLEAN -> BooleanQuizScreen(mainViewModel,Modifier)
+        QuestionType.MULTIPLE -> MultipleQuizScreen(mainViewModel,Modifier)
         else -> throw IllegalAccessException()
     }
 }

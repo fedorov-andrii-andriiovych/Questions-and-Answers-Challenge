@@ -10,13 +10,19 @@ class RetrofitNetworkRepositoryImpl(private val questionServices: QuestionServic
 
     override suspend fun getNewQuestion(category: Int,difficulty: String ,type: String): QuestionModel {
         val questionResponse = questionServices.getNewQuestion(category = category, difficulty = difficulty, type = type).results[0]
+        val answers = mutableListOf<String>()
+        answers.addAll(questionResponse.incorrectAnswers)
+        answers.add(questionResponse.correctAnswer)
+        answers.shuffle()
+        Log.d("TAGGG",answers.toString())
         return QuestionModel(
             category = questionResponse.category,
             type = questionResponse.type,
             difficulty = questionResponse.difficulty,
             question = questionResponse.question,
             correct_answer = questionResponse.correctAnswer,
-            incorrect_answers = questionResponse.incorrectAnswers
+            incorrect_answers = questionResponse.incorrectAnswers,
+            answers = answers
         )
     }
 }

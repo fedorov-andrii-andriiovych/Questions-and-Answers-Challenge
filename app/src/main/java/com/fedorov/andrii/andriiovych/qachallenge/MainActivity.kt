@@ -10,11 +10,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.fedorov.andrii.andriiovych.qachallenge.screens.BooleanQuizScreen
 import com.fedorov.andrii.andriiovych.qachallenge.screens.CategoryScreen
 import com.fedorov.andrii.andriiovych.qachallenge.screens.HomeScreen
-import com.fedorov.andrii.andriiovych.qachallenge.screens.QuizScreen
+import com.fedorov.andrii.andriiovych.qachallenge.screens.MultipleQuizScreen
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackground
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.QAChallengeTheme
+import com.fedorov.andrii.andriiovych.qachallenge.viewmodels.BooleanViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.viewmodels.MultipleViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +25,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewModel: MainViewModel = viewModel()
             val navController = rememberNavController()
+            val multipleViewModel: MultipleViewModel = viewModel()
+            val booleanViewModel: BooleanViewModel = viewModel()
             QAChallengeTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -36,12 +41,27 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(CATEGORY_SCREEN) {
                             CategoryScreen(Modifier,viewModel, onClickCategory = {
-                                viewModel.categoryState.value = it
-                                navController.navigate(QUIZ_SCREEN)
+                                when (viewModel.typeState.value) {
+                                    QuestionType.BOOLEAN -> {
+                                        booleanViewModel.categoryState.value = it
+                                        booleanViewModel.getNewQuestion()
+                                        navController.navigate(BOOLEAN_QUIZ_SCREEN)
+                                    }
+                                    QuestionType.MULTIPLE -> {
+                                        multipleViewModel.categoryState.value = it
+                                        multipleViewModel.getNewQuestion()
+                                        navController.navigate(MULTIPLE_QUIZ_SCREEN)
+                                    }
+                                    else -> throw IllegalAccessException()
+                                }
+
                             })
                         }
-                        composable(QUIZ_SCREEN){
-                            QuizScreen( viewModel,Modifier)
+                        composable(BOOLEAN_QUIZ_SCREEN){
+                            BooleanQuizScreen(booleanViewModel = booleanViewModel, modifier = Modifier)
+                        }
+                        composable(MULTIPLE_QUIZ_SCREEN){
+                            MultipleQuizScreen(multipleViewModel = multipleViewModel, modifier = Modifier)
                         }
                     }
                 }
@@ -52,6 +72,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         const val HOME_SCREEN = "homeScreen"
         const val CATEGORY_SCREEN = "categoryScreen"
-        const val QUIZ_SCREEN = "quizScreen"
+        const val MULTIPLE_QUIZ_SCREEN = "multipleQuizScreen"
+        const val BOOLEAN_QUIZ_SCREEN = "booleanQuizScreen"
     }
 }

@@ -14,7 +14,6 @@ class RetrofitNetworkRepositoryImpl(private val questionServices: QuestionServic
         answers.addAll(questionResponse.incorrectAnswers)
         answers.add(questionResponse.correctAnswer)
         answers.shuffle()
-        Log.d("TAGGG",questionResponse.toString())
         return QuestionModel(
             category = questionResponse.category,
             type = questionResponse.type,

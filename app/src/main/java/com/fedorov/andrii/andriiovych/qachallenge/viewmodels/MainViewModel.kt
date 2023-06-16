@@ -24,9 +24,8 @@ enum class QuestionDifficulty() {
     ANY
 }
 
-class MainViewModel(private val networkRepository: NetworkRepository = RetrofitNetworkRepositoryImpl()) :
+class MainViewModel() :
     ViewModel() {
-
     val categories = listOf<CategoryModel>(
         CategoryModel("General Knowledge", 9),
         CategoryModel("Books", 10),
@@ -54,26 +53,4 @@ class MainViewModel(private val networkRepository: NetworkRepository = RetrofitN
         CategoryModel("Cartoon & Animations", 32),
     )
     val typeState = mutableStateOf(QuestionType.ANY)
-//    val difficultyState = mutableStateOf(QuestionDifficulty.ANY)
-//    val questionState = mutableStateOf<QuestionModel>(QuestionModel("","","","","", listOf(),
-//        listOf("","","","")
-//    ))
-    val categoryState = mutableStateOf<CategoryModel>(categories[0])
-
-
-//    fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
-//        val type: String =
-//            if (typeState.value == QuestionType.ANY) "" else typeState.value.toString().lowercase()
-//        val category: Int = categoryState.value.id
-//        val difficulty: String =
-//            if (difficultyState.value == QuestionDifficulty.ANY) "" else difficultyState.value.toString().lowercase()
-//        val newQuestion =
-//            networkRepository.getNewQuestion(
-//                category = category,
-//                type = type,
-//                difficulty = difficulty
-//            )
-//        questionState.value = newQuestion
-//    }
-
 }

@@ -1,4 +1,4 @@
-package com.fedorov.andrii.andriiovych.qachallenge.Screens
+package com.fedorov.andrii.andriiovych.qachallenge.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

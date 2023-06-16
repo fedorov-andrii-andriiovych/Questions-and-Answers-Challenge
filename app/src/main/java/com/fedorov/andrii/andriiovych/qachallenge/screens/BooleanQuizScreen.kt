@@ -1,7 +1,6 @@
-package com.fedorov.andrii.andriiovych.qachallenge.Screens
+package com.fedorov.andrii.andriiovych.qachallenge.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -10,29 +9,30 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fedorov.andrii.andriiovych.qachallenge.MainViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.QuestionType
-import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
-
+import com.fedorov.andrii.andriiovych.qachallenge.viewmodels.BooleanViewModel
 
 @Composable
-fun HomeScreen(
-    modifier: Modifier,
-    mainViewModel: MainViewModel,
-    onClickType: (QuestionType) -> Unit
-) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly) {
+fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
+    val button0ColorState by booleanViewModel.button0ColorState.collectAsState()
+    val button1ColorState by booleanViewModel.button1ColorState.collectAsState()
+    val questionState by booleanViewModel.questionState.collectAsState()
+    val categoryState by booleanViewModel.categoryState.collectAsState()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
+    ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -44,39 +44,48 @@ fun HomeScreen(
 
         ) {
             Text(
-                text = "Q&A Challenge",
+                text = categoryState.name,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
         }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f), contentAlignment = Alignment.Center
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f), contentAlignment = Alignment.Center
         ) {
-            Image(painter = painterResource(id = R.drawable.qa ), contentDescription = "qa")
+            Text(
+                text = questionState.question,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
         }
 
         Button(
-            onClick = { onClickType(QuestionType.MULTIPLE) },
-            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
+            onClick = {booleanViewModel.checkCorrectAnswer(0) },
+            colors = ButtonDefaults.buttonColors(backgroundColor = button0ColorState),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(
                 1.dp,
                 Color.Black
             ),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp)
         ) {
             Text(
-                text = "Multiple Choice",
+                text = "True",
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
         }
         Button(
-            onClick = { onClickType(QuestionType.BOOLEAN) },
-            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
+            onClick = { booleanViewModel.checkCorrectAnswer(1)},
+            colors = ButtonDefaults.buttonColors(backgroundColor = button1ColorState),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(
                 1.dp,
@@ -85,7 +94,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "True / False",
+                text = "False",
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White

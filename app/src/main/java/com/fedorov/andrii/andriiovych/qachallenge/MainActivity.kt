@@ -10,9 +10,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.fedorov.andrii.andriiovych.qachallenge.Screens.CategoryScreen
-import com.fedorov.andrii.andriiovych.qachallenge.Screens.HomeScreen
-import com.fedorov.andrii.andriiovych.qachallenge.Screens.QuizScreen
+import com.fedorov.andrii.andriiovych.qachallenge.screens.CategoryScreen
+import com.fedorov.andrii.andriiovych.qachallenge.screens.HomeScreen
+import com.fedorov.andrii.andriiovych.qachallenge.screens.QuizScreen
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackground
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.QAChallengeTheme
 
@@ -37,7 +37,6 @@ class MainActivity : ComponentActivity() {
                         composable(CATEGORY_SCREEN) {
                             CategoryScreen(Modifier,viewModel, onClickCategory = {
                                 viewModel.categoryState.value = it
-                                viewModel.getNewQuestion()
                                 navController.navigate(QUIZ_SCREEN)
                             })
                         }

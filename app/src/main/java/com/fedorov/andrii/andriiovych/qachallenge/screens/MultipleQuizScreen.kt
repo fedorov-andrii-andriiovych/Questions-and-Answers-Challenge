@@ -1,4 +1,4 @@
-package com.fedorov.andrii.andriiovych.qachallenge.Screens
+package com.fedorov.andrii.andriiovych.qachallenge.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -9,6 +9,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,11 +19,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fedorov.andrii.andriiovych.qachallenge.MainViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
+import com.fedorov.andrii.andriiovych.qachallenge.viewmodels.MultipleViewModel
 
 @Composable
-fun MultipleQuizScreen(mainViewModel:MainViewModel,modifier: Modifier) {
+fun MultipleQuizScreen(multipleViewModel: MultipleViewModel,modifier: Modifier) {
+    val button0ColorState by multipleViewModel.button0ColorState.collectAsState()
+    val button1ColorState by multipleViewModel.button1ColorState.collectAsState()
+    val button2ColorState by multipleViewModel.button2ColorState.collectAsState()
+    val button3ColorState by multipleViewModel.button3ColorState.collectAsState()
+    val questionState by multipleViewModel.questionState.collectAsState()
+    val categoryState by multipleViewModel.categoryState.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,7 +46,7 @@ fun MultipleQuizScreen(mainViewModel:MainViewModel,modifier: Modifier) {
 
         ) {
             Text(
-                text = mainViewModel.categoryState.value.name,
+                text = categoryState.name,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -50,7 +58,7 @@ fun MultipleQuizScreen(mainViewModel:MainViewModel,modifier: Modifier) {
                 .weight(1f), contentAlignment = Alignment.Center
         ) {
             Text(
-                text = mainViewModel.questionState.value.question,
+                text = questionState.question,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -59,8 +67,8 @@ fun MultipleQuizScreen(mainViewModel:MainViewModel,modifier: Modifier) {
         }
 
         Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
+            onClick = { multipleViewModel.checkCorrectAnswer(0)},
+            colors = ButtonDefaults.buttonColors(backgroundColor = button0ColorState),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(
                 1.dp,
@@ -71,15 +79,15 @@ fun MultipleQuizScreen(mainViewModel:MainViewModel,modifier: Modifier) {
                 .padding(bottom = 16.dp)
         ) {
             Text(
-                text = mainViewModel.questionState.value.answers[0] ?: "",
+                text = questionState.answers[0] ,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
         }
         Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
+            onClick = { multipleViewModel.checkCorrectAnswer(1)},
+            colors = ButtonDefaults.buttonColors(backgroundColor = button1ColorState),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(
                 1.dp,
@@ -89,15 +97,15 @@ fun MultipleQuizScreen(mainViewModel:MainViewModel,modifier: Modifier) {
                 .padding(bottom = 16.dp)
         ) {
             Text(
-                text = mainViewModel.questionState.value.answers[1] ?: "",
+                text = questionState.answers[1] ,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
         }
         Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
+            onClick = { multipleViewModel.checkCorrectAnswer(2)},
+            colors = ButtonDefaults.buttonColors(backgroundColor = button2ColorState),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(
                 1.dp,
@@ -107,15 +115,15 @@ fun MultipleQuizScreen(mainViewModel:MainViewModel,modifier: Modifier) {
                 .padding(bottom = 16.dp)
         ) {
             Text(
-                text = mainViewModel.questionState.value.answers[2] ?: "",
+                text = questionState.answers[2] ,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
         }
         Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
+            onClick = { multipleViewModel.checkCorrectAnswer(3)},
+            colors = ButtonDefaults.buttonColors(backgroundColor = button3ColorState),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(
                 1.dp,
@@ -125,7 +133,7 @@ fun MultipleQuizScreen(mainViewModel:MainViewModel,modifier: Modifier) {
                 .padding(bottom = 16.dp)
         ) {
             Text(
-                text = mainViewModel.questionState.value.answers[3] ?: "",
+                text = questionState.answers[3] ,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White

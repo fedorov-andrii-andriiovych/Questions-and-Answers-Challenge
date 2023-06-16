@@ -39,7 +39,7 @@ fun HomeScreen(
                 .clip(shape = RoundedCornerShape(25.dp))
                 .background(color = PrimaryBackgroundBox)
                 .fillMaxWidth()
-                .height(100.dp)
+                .height(60.dp)
                 .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
 
         ) {
@@ -58,7 +58,7 @@ fun HomeScreen(
         }
 
         Button(
-            onClick = { onClickType(QuestionType.ANY) },
+            onClick = { onClickType(QuestionType.MULTIPLE) },
             colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(
@@ -75,7 +75,7 @@ fun HomeScreen(
             )
         }
         Button(
-            onClick = { onClickType(QuestionType.ANY) },
+            onClick = { onClickType(QuestionType.BOOLEAN) },
             colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(

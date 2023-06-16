@@ -32,7 +32,7 @@ fun CategoryScreen(modifier: Modifier, mainViewModel: MainViewModel,onClickCateg
                 .clip(shape = RoundedCornerShape(25.dp))
                 .background(color = PrimaryBackgroundBox)
                 .fillMaxWidth()
-                .height(100.dp)
+                .height(60.dp)
                 .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
 
         ) {

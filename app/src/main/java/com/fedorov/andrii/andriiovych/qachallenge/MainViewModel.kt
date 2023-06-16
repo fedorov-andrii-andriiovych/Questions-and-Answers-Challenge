@@ -1,5 +1,6 @@
 package com.fedorov.andrii.andriiovych.qachallenge
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -58,12 +59,12 @@ class MainViewModel(private val networkRepository: NetworkRepository = RetrofitN
     val categoryState = mutableStateOf<CategoryModel?>(categories[2])
 
 
-    fun getNewQuestionTrueFalse() = viewModelScope.launch(Dispatchers.IO) {
+    fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
         val type: String =
-            if (typeState.value == QuestionType.ANY) "" else typeState.value.toString()
+            if (typeState.value == QuestionType.ANY) "" else typeState.value.toString().lowercase()
         val category: Int = categoryState.value!!.id
         val difficulty: String =
-            if (difficultyState.value == QuestionDifficulty.ANY) "" else difficultyState.value.toString()
+            if (difficultyState.value == QuestionDifficulty.ANY) "" else difficultyState.value.toString().lowercase()
         val newQuestion =
             networkRepository.getNewQuestion(
                 category = category,
@@ -73,9 +74,4 @@ class MainViewModel(private val networkRepository: NetworkRepository = RetrofitN
         questionState.value = newQuestion
     }
 
-//    fun getNewQuestionMultipleChoice(type: String = "multiple") =
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val newQuestion = networkRepository.getNewQuestion()
-//            questionState.value = newQuestion
-//        }
 }

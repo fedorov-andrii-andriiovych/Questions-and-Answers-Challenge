@@ -1,5 +1,6 @@
 package com.fedorov.andrii.andriiovych.qachallenge.repositories
 
+import android.util.Log
 import com.fedorov.andrii.andriiovych.qachallenge.model.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.network.QuestionServices
 import com.fedorov.andrii.andriiovych.qachallenge.network.RetrofitQuestionsClient

@@ -1,15 +1,10 @@
 package com.fedorov.andrii.andriiovych.qachallenge
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.fedorov.andrii.andriiovych.qachallenge.model.CategoryModel
-import com.fedorov.andrii.andriiovych.qachallenge.model.QuestionModel
-import com.fedorov.andrii.andriiovych.qachallenge.repositories.NetworkRepository
-import com.fedorov.andrii.andriiovych.qachallenge.repositories.RetrofitNetworkRepositoryImpl
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 enum class QuestionType() {
     MULTIPLE,
@@ -24,7 +19,8 @@ enum class QuestionDifficulty() {
     ANY
 }
 
-class MainViewModel() :
+@HiltViewModel
+class MainViewModel @Inject constructor() :
     ViewModel() {
     val categories = listOf<CategoryModel>(
         CategoryModel("General Knowledge", 9),

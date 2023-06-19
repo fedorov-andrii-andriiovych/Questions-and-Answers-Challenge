@@ -10,13 +10,16 @@ import com.fedorov.andrii.andriiovych.qachallenge.repositories.RetrofitNetworkRe
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MultipleViewModel(private val networkRepository: NetworkRepository = RetrofitNetworkRepositoryImpl()) :
+@HiltViewModel
+class MultipleViewModel @Inject constructor( val networkRepository: NetworkRepository ) :
     ViewModel() {
     val button0ColorState = MutableStateFlow(PrimaryBackgroundBox)
     val button1ColorState = MutableStateFlow(PrimaryBackgroundBox)

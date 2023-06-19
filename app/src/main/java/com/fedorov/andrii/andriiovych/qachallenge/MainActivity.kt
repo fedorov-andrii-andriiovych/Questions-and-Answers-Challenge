@@ -18,7 +18,9 @@ import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackground
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.QAChallengeTheme
 import com.fedorov.andrii.andriiovych.qachallenge.viewmodels.BooleanViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.viewmodels.MultipleViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

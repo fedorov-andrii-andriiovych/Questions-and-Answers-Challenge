@@ -5,8 +5,9 @@ import android.util.Log
 import com.fedorov.andrii.andriiovych.qachallenge.model.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.network.QuestionServices
 import com.fedorov.andrii.andriiovych.qachallenge.network.RetrofitQuestionsClient
+import javax.inject.Inject
 
-class RetrofitNetworkRepositoryImpl(private val questionServices: QuestionServices = RetrofitQuestionsClient.create()) :
+class RetrofitNetworkRepositoryImpl @Inject constructor(private val questionServices: QuestionServices) :
     NetworkRepository {
 
     override suspend fun getNewQuestion(category: Int,difficulty: String ,type: String): QuestionModel {

@@ -36,13 +36,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavHost(navController = navController, startDestination = HOME_SCREEN) {
                         composable(HOME_SCREEN) {
-                            HomeScreen(Modifier,viewModel, onClickType = {
+                            HomeScreen(Modifier, viewModel, onClickType = {
                                 viewModel.typeState.value = it
                                 navController.navigate(CATEGORY_SCREEN)
                             })
                         }
                         composable(CATEGORY_SCREEN) {
-                            CategoryScreen(Modifier,viewModel, onClickCategory = {
+                            CategoryScreen(Modifier, viewModel, onClickCategory = {
                                 when (viewModel.typeState.value) {
                                     QuestionType.BOOLEAN -> {
                                         booleanViewModel.categoryState.value = it
@@ -59,11 +59,17 @@ class MainActivity : ComponentActivity() {
 
                             })
                         }
-                        composable(BOOLEAN_QUIZ_SCREEN){
-                            BooleanQuizScreen(booleanViewModel = booleanViewModel, modifier = Modifier)
+                        composable(BOOLEAN_QUIZ_SCREEN) {
+                            BooleanQuizScreen(
+                                booleanViewModel = booleanViewModel,
+                                modifier = Modifier
+                            )
                         }
-                        composable(MULTIPLE_QUIZ_SCREEN){
-                            MultipleQuizScreen(multipleViewModel = multipleViewModel, modifier = Modifier)
+                        composable(MULTIPLE_QUIZ_SCREEN) {
+                            MultipleQuizScreen(
+                                multipleViewModel = multipleViewModel,
+                                modifier = Modifier
+                            )
                         }
                     }
                 }

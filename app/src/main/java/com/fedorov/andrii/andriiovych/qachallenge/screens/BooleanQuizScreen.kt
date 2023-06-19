@@ -19,87 +19,101 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fedorov.andrii.andriiovych.qachallenge.ResultOf
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
 import com.fedorov.andrii.andriiovych.qachallenge.viewmodels.BooleanViewModel
 
 @Composable
 fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
+    val screenState by booleanViewModel.screenState.collectAsState()
     val button0ColorState by booleanViewModel.button0ColorState.collectAsState()
     val button1ColorState by booleanViewModel.button1ColorState.collectAsState()
     val questionState by booleanViewModel.questionState.collectAsState()
     val categoryState by booleanViewModel.categoryState.collectAsState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(25.dp))
-                .background(color = PrimaryBackgroundBox)
-                .fillMaxWidth()
-                .height(60.dp)
-                .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
+    when {
+        screenState is ResultOf.Success -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .clip(shape = RoundedCornerShape(25.dp))
+                        .background(color = PrimaryBackgroundBox)
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
 
-        ) {
-            Text(
-                text = categoryState.name,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f), contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = questionState.question,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                textAlign = TextAlign.Center
-            )
-        }
+                ) {
+                    Text(
+                        text = categoryState.name,
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f), contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = questionState.question,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
+                }
 
-        Button(
-            onClick = {booleanViewModel.checkCorrectAnswer(0) },
-            colors = ButtonDefaults.buttonColors(backgroundColor = button0ColorState),
-            shape = RoundedCornerShape(25.dp),
-            border = BorderStroke(
-                1.dp,
-                Color.Black
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp)
-        ) {
-            Text(
-                text = "True",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-        Button(
-            onClick = { booleanViewModel.checkCorrectAnswer(1)},
-            colors = ButtonDefaults.buttonColors(backgroundColor = button1ColorState),
-            shape = RoundedCornerShape(25.dp),
-            border = BorderStroke(
-                1.dp,
-                Color.Black
-            ),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "False",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
+                Button(
+                    onClick = { booleanViewModel.checkCorrectAnswer(0) },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = button0ColorState),
+                    shape = RoundedCornerShape(25.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        Color.Black
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp)
+                ) {
+                    Text(
+                        text = "True",
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+                Button(
+                    onClick = { booleanViewModel.checkCorrectAnswer(1) },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = button1ColorState),
+                    shape = RoundedCornerShape(25.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        Color.Black
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "False",
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
 
+            }
+        }
+        screenState is ResultOf.Failure -> {
+            FailureScreen(
+                message = (screenState as ResultOf.Failure).message,
+                onClickRetry = { booleanViewModel.getNewQuestion() })
+        }
+        screenState is ResultOf.Loading -> {
+            LoadingScreen()
+        }
     }
 }

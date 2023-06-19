@@ -3,10 +3,10 @@ package com.fedorov.andrii.andriiovych.qachallenge.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fedorov.andrii.andriiovych.qachallenge.QuestionDifficulty
+import com.fedorov.andrii.andriiovych.qachallenge.ResultOf
 import com.fedorov.andrii.andriiovych.qachallenge.model.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.model.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.repositories.NetworkRepository
-import com.fedorov.andrii.andriiovych.qachallenge.repositories.RetrofitNetworkRepositoryImpl
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
@@ -19,8 +19,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MultipleViewModel @Inject constructor( val networkRepository: NetworkRepository ) :
+class MultipleViewModel @Inject constructor(val networkRepository: NetworkRepository) :
     ViewModel() {
+    val screenState = MutableStateFlow<ResultOf>(ResultOf.Loading)
     val button0ColorState = MutableStateFlow(PrimaryBackgroundBox)
     val button1ColorState = MutableStateFlow(PrimaryBackgroundBox)
     val button2ColorState = MutableStateFlow(PrimaryBackgroundBox)
@@ -40,23 +41,30 @@ class MultipleViewModel @Inject constructor( val networkRepository: NetworkRepos
     )
     val categoryState = MutableStateFlow(CategoryModel("Nothing", -1))
     fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
+        screenState.value = ResultOf.Loading
         val type: String = type
         val category: Int = categoryState.value.id
         val difficulty: String =
             if (difficultyState.value == QuestionDifficulty.ANY) "" else difficultyState.value.toString()
                 .lowercase()
-        val newQuestion =
-            networkRepository.getNewQuestion(
-                category = category,
-                type = type,
-                difficulty = difficulty
-            )
-        withContext(Dispatchers.Main) {
-            button0ColorState.value = PrimaryBackgroundBox
-            button1ColorState.value = PrimaryBackgroundBox
-            button2ColorState.value = PrimaryBackgroundBox
-            button3ColorState.value = PrimaryBackgroundBox
-            questionState.value = newQuestion
+        try {
+            val newQuestion =
+                networkRepository.getNewQuestion(
+                    category = category,
+                    type = type,
+                    difficulty = difficulty
+                )
+
+            withContext(Dispatchers.Main) {
+                button0ColorState.value = PrimaryBackgroundBox
+                button1ColorState.value = PrimaryBackgroundBox
+                button2ColorState.value = PrimaryBackgroundBox
+                button3ColorState.value = PrimaryBackgroundBox
+                questionState.value = newQuestion
+            }
+            screenState.value = ResultOf.Success
+        } catch (e: Exception) {
+            screenState.value = ResultOf.Failure(message = "Something went wrong, please reload the page.")
         }
     }
 

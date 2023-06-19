@@ -6,6 +6,14 @@ import com.fedorov.andrii.andriiovych.qachallenge.model.CategoryModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+sealed class ResultOf {
+    object Success: ResultOf()
+    data class Failure(
+        val message: String
+    ): ResultOf()
+    object Loading : ResultOf()
+}
+
 enum class QuestionType() {
     MULTIPLE,
     BOOLEAN,
@@ -22,7 +30,7 @@ enum class QuestionDifficulty() {
 @HiltViewModel
 class MainViewModel @Inject constructor() :
     ViewModel() {
-    val categories = listOf<CategoryModel>(
+    val categories = listOf(
         CategoryModel("General Knowledge", 9),
         CategoryModel("Books", 10),
         CategoryModel("Film", 11),

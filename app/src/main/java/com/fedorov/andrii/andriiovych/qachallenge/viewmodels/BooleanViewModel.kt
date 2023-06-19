@@ -3,6 +3,7 @@ package com.fedorov.andrii.andriiovych.qachallenge.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fedorov.andrii.andriiovych.qachallenge.QuestionDifficulty
+import com.fedorov.andrii.andriiovych.qachallenge.ResultOf
 import com.fedorov.andrii.andriiovych.qachallenge.model.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.model.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.repositories.NetworkRepository
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class BooleanViewModel @Inject constructor( val networkRepository: NetworkRepository) :
     ViewModel() {
     private val type = "boolean"
+    val screenState = MutableStateFlow<ResultOf>(ResultOf.Loading)
     val button0ColorState = MutableStateFlow(PrimaryBackgroundBox)
     val button1ColorState = MutableStateFlow(PrimaryBackgroundBox)
     val difficultyState = MutableStateFlow(QuestionDifficulty.ANY)
@@ -38,21 +40,27 @@ class BooleanViewModel @Inject constructor( val networkRepository: NetworkReposi
     )
     val categoryState = MutableStateFlow(CategoryModel("Nothing", -1))
     fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
+        screenState.value = ResultOf.Loading
         val type: String = type
         val category: Int = categoryState.value.id
         val difficulty: String =
             if (difficultyState.value == QuestionDifficulty.ANY) "" else difficultyState.value.toString()
                 .lowercase()
-        val newQuestion =
-            networkRepository.getNewQuestion(
-                category = category,
-                type = type,
-                difficulty = difficulty
-            )
-        withContext(Dispatchers.Main) {
-            button0ColorState.value = PrimaryBackgroundBox
-            button1ColorState.value = PrimaryBackgroundBox
-            questionState.value = newQuestion
+        try {
+            val newQuestion =
+                networkRepository.getNewQuestion(
+                    category = category,
+                    type = type,
+                    difficulty = difficulty
+                )
+            withContext(Dispatchers.Main) {
+                button0ColorState.value = PrimaryBackgroundBox
+                button1ColorState.value = PrimaryBackgroundBox
+                questionState.value = newQuestion
+            }
+            screenState.value = ResultOf.Success
+        }catch (e:Exception){
+            screenState.value = ResultOf.Failure(message = "Something went wrong, please reload the page.")
         }
     }
 

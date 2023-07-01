@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +45,7 @@ fun HomeScreen(
 
         ) {
             Text(
-                text = "Q&A Challenge",
+                text = stringResource(R.string.qa_chalenge),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -68,7 +69,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
         ) {
             Text(
-                text = "Multiple Choice",
+                text = stringResource(R.string.multiple_choice),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -85,7 +86,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "True / False",
+                text = stringResource(R.string.tru_fals),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White

@@ -15,11 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.MainViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.model.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
 
@@ -36,7 +38,7 @@ fun CategoryScreen(modifier: Modifier, mainViewModel: MainViewModel,onClickCateg
                 .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
 
         ) {
-            Text(text = "CATEGORIES", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            Text(text = stringResource(R.string.categories), fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
         }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),

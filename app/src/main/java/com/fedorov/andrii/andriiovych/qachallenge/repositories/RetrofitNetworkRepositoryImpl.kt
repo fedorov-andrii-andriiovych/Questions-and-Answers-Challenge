@@ -26,7 +26,7 @@ class RetrofitNetworkRepositoryImpl @Inject constructor(private val questionServ
             answers = answers
         )
     }
-    fun decodeHtmlString(htmlString: String): String {
+    private fun decodeHtmlString(htmlString: String): String {
         return Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY).toString()
     }
 }

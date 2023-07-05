@@ -1,4 +1,4 @@
-package com.fedorov.andrii.andriiovych.qachallenge.network
+package com.fedorov.andrii.andriiovych.qachallenge.data.network
 
 import com.google.gson.annotations.SerializedName
 

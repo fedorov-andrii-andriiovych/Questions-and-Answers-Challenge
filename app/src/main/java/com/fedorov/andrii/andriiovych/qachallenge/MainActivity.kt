@@ -10,14 +10,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.fedorov.andrii.andriiovych.qachallenge.screens.BooleanQuizScreen
-import com.fedorov.andrii.andriiovych.qachallenge.screens.CategoryScreen
-import com.fedorov.andrii.andriiovych.qachallenge.screens.HomeScreen
-import com.fedorov.andrii.andriiovych.qachallenge.screens.MultipleQuizScreen
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.BooleanQuizScreen
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.CategoryScreen
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.HomeScreen
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.MultipleQuizScreen
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackground
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.QAChallengeTheme
-import com.fedorov.andrii.andriiovych.qachallenge.viewmodels.BooleanViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.viewmodels.MultipleViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.BooleanViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.MultipleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,11 +45,13 @@ class MainActivity : ComponentActivity() {
                             CategoryScreen(Modifier, viewModel, onClickCategory = {
                                 when (viewModel.typeState.value) {
                                     QuestionType.BOOLEAN -> {
+                                        booleanViewModel.difficultyState.value = QuestionDifficulty.ANY
                                         booleanViewModel.categoryState.value = it
                                         booleanViewModel.getNewQuestion()
                                         navController.navigate(BOOLEAN_QUIZ_SCREEN)
                                     }
                                     QuestionType.MULTIPLE -> {
+                                        multipleViewModel.difficultyState.value = QuestionDifficulty.ANY
                                         multipleViewModel.categoryState.value = it
                                         multipleViewModel.getNewQuestion()
                                         navController.navigate(MULTIPLE_QUIZ_SCREEN)

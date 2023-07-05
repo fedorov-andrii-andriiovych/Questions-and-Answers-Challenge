@@ -1,4 +1,4 @@
-package com.fedorov.andrii.andriiovych.qachallenge.screens
+package com.fedorov.andrii.andriiovych.qachallenge.presentation.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.ResultOf
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
-import com.fedorov.andrii.andriiovych.qachallenge.viewmodels.BooleanViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.BooleanViewModel
 
 @Composable
 fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {

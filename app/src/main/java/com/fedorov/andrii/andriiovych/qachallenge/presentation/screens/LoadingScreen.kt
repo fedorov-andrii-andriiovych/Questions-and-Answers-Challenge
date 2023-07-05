@@ -1,4 +1,4 @@
-package com.fedorov.andrii.andriiovych.qachallenge.screens
+package com.fedorov.andrii.andriiovych.qachallenge.presentation.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

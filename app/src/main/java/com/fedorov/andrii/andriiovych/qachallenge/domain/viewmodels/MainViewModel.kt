@@ -2,7 +2,7 @@ package com.fedorov.andrii.andriiovych.qachallenge
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.model.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.data.model.CategoryModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,17 +14,17 @@ sealed class ResultOf {
     object Loading : ResultOf()
 }
 
-enum class QuestionType() {
-    MULTIPLE,
-    BOOLEAN,
-    ANY
+enum class QuestionType(val value:String) {
+    MULTIPLE("multiple"),
+    BOOLEAN("boolean"),
+    ANY("")
 }
 
-enum class QuestionDifficulty() {
-    EASY,
-    MEDIUM,
-    HARD,
-    ANY
+enum class QuestionDifficulty(val value:String) {
+    EASY("easy"),
+    MEDIUM("medium"),
+    HARD("hard"),
+    ANY("")
 }
 
 @HiltViewModel

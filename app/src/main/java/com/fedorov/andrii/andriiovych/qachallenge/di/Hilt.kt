@@ -1,8 +1,8 @@
 package com.fedorov.andrii.andriiovych.qachallenge.di
 
-import com.fedorov.andrii.andriiovych.qachallenge.network.QuestionServices
-import com.fedorov.andrii.andriiovych.qachallenge.repositories.NetworkRepository
-import com.fedorov.andrii.andriiovych.qachallenge.repositories.RetrofitNetworkRepositoryImpl
+import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
+import com.fedorov.andrii.andriiovych.qachallenge.data.repositories.NetworkRepository
+import com.fedorov.andrii.andriiovych.qachallenge.data.repositories.RetrofitNetworkRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

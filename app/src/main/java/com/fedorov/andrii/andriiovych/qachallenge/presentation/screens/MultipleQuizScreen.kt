@@ -19,9 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fedorov.andrii.andriiovych.qachallenge.ResultOf
-import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
 import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.MultipleViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.ResultOf
+import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
 
 @Composable
 fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier) {
@@ -81,7 +81,7 @@ fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier)
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp,)
+                        .padding(bottom = 16.dp)
                 ) {
                     Text(
                         text = questionState.answers[0],

@@ -19,9 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fedorov.andrii.andriiovych.qachallenge.MainViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.QuestionType
 import com.fedorov.andrii.andriiovych.qachallenge.R
+import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.MainViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.QuestionType
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
 
 

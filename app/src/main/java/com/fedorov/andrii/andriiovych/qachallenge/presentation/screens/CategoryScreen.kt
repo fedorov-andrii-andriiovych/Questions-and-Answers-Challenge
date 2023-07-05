@@ -20,13 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fedorov.andrii.andriiovych.qachallenge.MainViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.data.model.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.MainViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
 
 @Composable
-fun CategoryScreen(modifier: Modifier, mainViewModel: MainViewModel,onClickCategory:(CategoryModel)->Unit) {
+fun CategoryScreen(modifier: Modifier, mainViewModel: MainViewModel, onClickCategory:(CategoryModel)->Unit) {
     Column(modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)){
         Box(
             contentAlignment = Alignment.Center,

@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQuestionUseCase) :
     ViewModel() {
-    val screenState = MutableStateFlow<ResultOf>(ResultOf.Loading)
+    val screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
     val button0ColorState = MutableStateFlow(PrimaryBackgroundBox)
     val button1ColorState = MutableStateFlow(PrimaryBackgroundBox)
     val button2ColorState = MutableStateFlow(PrimaryBackgroundBox)
@@ -27,26 +27,22 @@ class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQ
     val difficultyState = MutableStateFlow(QuestionDifficulty.ANY)
     val questionState = MutableStateFlow(QuestionModel())
     val categoryState = MutableStateFlow(CategoryModel())
+
     fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
         screenState.value = ResultOf.Loading
-        try {
-            val newQuestion =
-                newQuestionUseCase.getNewQuestion(
-                    category = categoryState.value.id,
-                    type = QuestionType.MULTIPLE.value,
-                    difficulty = difficultyState.value.value
-                )
-
-            withContext(Dispatchers.Main) {
-                button0ColorState.value = PrimaryBackgroundBox
-                button1ColorState.value = PrimaryBackgroundBox
-                button2ColorState.value = PrimaryBackgroundBox
-                button3ColorState.value = PrimaryBackgroundBox
-                questionState.value = newQuestion
-            }
-            screenState.value = ResultOf.Success
-        } catch (e: Exception) {
-            screenState.value = ResultOf.Failure(message = MainViewModel.SOMETHING_WENT_WRONG)
+        val result =
+            newQuestionUseCase.getNewQuestion(
+                category = categoryState.value.id,
+                type = QuestionType.MULTIPLE.value,
+                difficulty = difficultyState.value.value
+            )
+        screenState.value = result
+        if (result is ResultOf.Success<QuestionModel>){
+            button0ColorState.value = PrimaryBackgroundBox
+            button1ColorState.value = PrimaryBackgroundBox
+            button2ColorState.value = PrimaryBackgroundBox
+            button3ColorState.value = PrimaryBackgroundBox
+            questionState.value = result.value
         }
     }
 

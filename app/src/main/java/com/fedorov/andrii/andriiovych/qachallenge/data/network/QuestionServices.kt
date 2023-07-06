@@ -1,5 +1,6 @@
 package com.fedorov.andrii.andriiovych.qachallenge.data.network
 
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,5 +13,5 @@ interface QuestionServices {
         @Query("category") category: Int ,
         @Query("difficulty") difficulty: String = "",
         @Query("type") type: String = ""
-    ): QuestionResponse
+    ): Response<QuestionResponse>
 }

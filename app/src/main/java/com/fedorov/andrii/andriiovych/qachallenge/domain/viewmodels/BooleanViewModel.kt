@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQuestionUseCase) :
     ViewModel() {
-    val screenState = MutableStateFlow<ResultOf>(ResultOf.Loading)
+    val screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
     val button0ColorState = MutableStateFlow(PrimaryBackgroundBox)
     val button1ColorState = MutableStateFlow(PrimaryBackgroundBox)
     val difficultyState = MutableStateFlow(QuestionDifficulty.ANY)
@@ -27,21 +27,17 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
     val categoryState = MutableStateFlow(CategoryModel())
     fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
         screenState.value = ResultOf.Loading
-        try {
-            val newQuestion =
-                newQuestionUseCase.getNewQuestion(
-                    category = categoryState.value.id,
-                    type = QuestionType.BOOLEAN.value,
-                    difficulty = difficultyState.value.value
-                )
-            withContext(Dispatchers.Main) {
-                button0ColorState.value = PrimaryBackgroundBox
-                button1ColorState.value = PrimaryBackgroundBox
-                questionState.value = newQuestion
-            }
-            screenState.value = ResultOf.Success
-        }catch (e:Exception){
-            screenState.value = ResultOf.Failure(message = MainViewModel.SOMETHING_WENT_WRONG)
+        val result =
+            newQuestionUseCase.getNewQuestion(
+                category = categoryState.value.id,
+                type = QuestionType.BOOLEAN.value,
+                difficulty = difficultyState.value.value
+            )
+        screenState.value = result
+        if (result is ResultOf.Success<QuestionModel>){
+            button0ColorState.value = PrimaryBackgroundBox
+            button1ColorState.value = PrimaryBackgroundBox
+            questionState.value = result.value
         }
     }
 
@@ -71,7 +67,7 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
         getNewQuestion()
     }
 
-    companion object{
+    companion object {
         private const val FALSE = "False"
         private const val TRUE = "True"
     }

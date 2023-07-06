@@ -2,8 +2,12 @@ package com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.fedorov.andrii.andriiovych.qachallenge.domain.model.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class ResultOf<out T> {
@@ -15,13 +19,13 @@ sealed class ResultOf<out T> {
     object Loading : ResultOf<Nothing>()
 }
 
-enum class QuestionType(val value:String) {
+enum class QuestionType(val value: String) {
     MULTIPLE("multiple"),
     BOOLEAN("boolean"),
     ANY("")
 }
 
-enum class QuestionDifficulty(val value:String) {
+enum class QuestionDifficulty(val value: String) {
     EASY("easy"),
     MEDIUM("medium"),
     HARD("hard"),
@@ -29,8 +33,12 @@ enum class QuestionDifficulty(val value:String) {
 }
 
 @HiltViewModel
-class MainViewModel @Inject constructor() :
+class MainViewModel @Inject constructor(private val newTokenUseCase: NewTokenUseCase) :
     ViewModel() {
+    init {
+        getNewToken()
+    }
+
     val categories = listOf(
         CategoryModel("General Knowledge", 9),
         CategoryModel("Books", 10),
@@ -58,5 +66,9 @@ class MainViewModel @Inject constructor() :
         CategoryModel("Cartoon & Animations", 32),
     )
     val typeState = mutableStateOf(QuestionType.ANY)
+
+    private fun getNewToken() = viewModelScope.launch (Dispatchers.IO) {
+        newTokenUseCase.getNewToken()
+    }
 
 }

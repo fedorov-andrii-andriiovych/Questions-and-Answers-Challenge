@@ -5,6 +5,7 @@ import android.util.Log
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.NetworkException
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionResponse
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
+import com.fedorov.andrii.andriiovych.qachallenge.data.network.UserToken
 import com.fedorov.andrii.andriiovych.qachallenge.domain.model.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
 import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.ResultOf
@@ -16,24 +17,29 @@ import javax.inject.Inject
 
 private const val SOMETHING_WENT_WRONG = "Something went wrong, please reload the page"
 
-class RetrofitNetworkRepositoryImpl @Inject constructor(private val questionServices: QuestionServices) :
+class RetrofitNetworkRepositoryImpl @Inject constructor(private val questionServices: QuestionServices, private val userToken:UserToken) :
     NetworkRepository {
+
+    override suspend fun getNewToken() {
+        try {
+            userToken.token = questionServices.getNewToken().token
+        }finally {}
+    }
 
     override suspend fun getNewQuestion(
         category: Int,
         difficulty: String,
         type: String
     ): ResultOf<QuestionModel> {
-        Log.d("TAGGG",type)
         return try {
             val result = parseResponse(
                 questionServices.getNewQuestion(
                     category = category,
                     difficulty = difficulty,
-                    type = type
+                    type = type,
+                    token = userToken.token
                 )
             )
-            Log.d("TAGGG",result.toString())
             ResultOf.Success(result)
         } catch (e: UnknownHostException) {
             ResultOf.Failure(e.message ?: SOMETHING_WENT_WRONG)
@@ -62,10 +68,11 @@ class RetrofitNetworkRepositoryImpl @Inject constructor(private val questionServ
         val questionResponse = response.results[0]
         val incorrectAnswers = questionResponse.incorrectAnswers.map { decodeHtmlString(it) }
         val correctAnswer = decodeHtmlString(questionResponse.correctAnswer)
-        val answers = mutableListOf<String>()
-        answers.addAll(incorrectAnswers)
-        answers.add(correctAnswer)
-        answers.shuffle()
+        val answers = mutableListOf<String>().apply {
+            addAll(incorrectAnswers)
+            add(correctAnswer)
+            shuffle()
+        }
         return QuestionModel(
             category = questionResponse.category,
             type = questionResponse.type,

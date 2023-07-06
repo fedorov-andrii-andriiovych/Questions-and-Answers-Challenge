@@ -1,6 +1,7 @@
 package com.fedorov.andrii.andriiovych.qachallenge.di
 
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
+import com.fedorov.andrii.andriiovych.qachallenge.data.network.UserToken
 import com.fedorov.andrii.andriiovych.qachallenge.data.repositories.RetrofitNetworkRepositoryImpl
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
 import dagger.Binds
@@ -34,5 +35,11 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit.create(QuestionServices::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserToken(): UserToken {
+        return UserToken
     }
 }

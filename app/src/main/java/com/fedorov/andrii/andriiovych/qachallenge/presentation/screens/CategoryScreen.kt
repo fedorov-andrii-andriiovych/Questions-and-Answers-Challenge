@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.domain.model.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.MainViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
+import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 @Composable
 fun CategoryScreen(modifier: Modifier, mainViewModel: MainViewModel, onClickCategory:(CategoryModel)->Unit) {
@@ -32,7 +32,7 @@ fun CategoryScreen(modifier: Modifier, mainViewModel: MainViewModel, onClickCate
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(25.dp))
-                .background(color = PrimaryBackgroundBox)
+                .background(color = PrimaryBackgroundPink)
                 .fillMaxWidth()
                 .height(60.dp)
                 .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
@@ -51,7 +51,7 @@ fun CategoryScreen(modifier: Modifier, mainViewModel: MainViewModel, onClickCate
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(25.dp))
-                        .background(color = PrimaryBackgroundBox)
+                        .background(color = PrimaryBackgroundPink)
                         .fillMaxWidth()
                         .height(100.dp)
                         .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))

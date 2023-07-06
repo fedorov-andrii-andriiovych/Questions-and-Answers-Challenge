@@ -7,21 +7,20 @@ import com.fedorov.andrii.andriiovych.qachallenge.domain.model.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
-import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
+import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQuestionUseCase) :
     ViewModel() {
     val screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
-    val button0ColorState = MutableStateFlow(PrimaryBackgroundBox)
-    val button1ColorState = MutableStateFlow(PrimaryBackgroundBox)
+    val button0ColorState = MutableStateFlow(PrimaryBackgroundPink)
+    val button1ColorState = MutableStateFlow(PrimaryBackgroundPink)
     val difficultyState = MutableStateFlow(QuestionDifficulty.ANY)
     val questionState = MutableStateFlow(QuestionModel())
     val categoryState = MutableStateFlow(CategoryModel())
@@ -35,8 +34,8 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
             )
         screenState.value = result
         if (result is ResultOf.Success<QuestionModel>){
-            button0ColorState.value = PrimaryBackgroundBox
-            button1ColorState.value = PrimaryBackgroundBox
+            button0ColorState.value = PrimaryBackgroundPink
+            button1ColorState.value = PrimaryBackgroundPink
             questionState.value = result.value
         }
     }

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.MainViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.QuestionType
-import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
+import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 
 @Composable
@@ -38,7 +38,7 @@ fun HomeScreen(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(25.dp))
-                .background(color = PrimaryBackgroundBox)
+                .background(color = PrimaryBackgroundPink)
                 .fillMaxWidth()
                 .height(60.dp)
                 .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
@@ -60,7 +60,7 @@ fun HomeScreen(
 
         Button(
             onClick = { onClickType(QuestionType.MULTIPLE) },
-            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
+            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundPink),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(
                 1.dp,
@@ -77,7 +77,7 @@ fun HomeScreen(
         }
         Button(
             onClick = { onClickType(QuestionType.BOOLEAN) },
-            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
+            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundPink),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(
                 1.dp,

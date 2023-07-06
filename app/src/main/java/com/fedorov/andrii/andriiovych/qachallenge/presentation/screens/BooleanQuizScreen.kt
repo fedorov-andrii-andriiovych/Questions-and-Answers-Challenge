@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.BooleanViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.ResultOf
-import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
+import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 @Composable
 fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
@@ -32,8 +33,8 @@ fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
     val button1ColorState by booleanViewModel.button1ColorState.collectAsState()
     val questionState by booleanViewModel.questionState.collectAsState()
     val categoryState by booleanViewModel.categoryState.collectAsState()
-    when {
-        screenState is ResultOf.Success -> {
+    when (screenState) {
+        is ResultOf.Success, ResultOf.Loading -> {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -43,7 +44,7 @@ fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(25.dp))
-                        .background(color = PrimaryBackgroundBox)
+                        .background(color = PrimaryBackgroundPink)
                         .fillMaxWidth()
                         .height(60.dp)
                         .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
@@ -61,13 +62,17 @@ fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
                         .fillMaxWidth()
                         .weight(1f), contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = questionState.question,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        textAlign = TextAlign.Center
-                    )
+                    if (screenState is ResultOf.Loading) {
+                        CircularProgressIndicator(color = PrimaryBackgroundPink)
+                    } else {
+                        Text(
+                            text = questionState.question,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
 
                 Button(
@@ -109,13 +114,10 @@ fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
 
             }
         }
-        screenState is ResultOf.Failure -> {
+        is ResultOf.Failure -> {
             FailureScreen(
                 message = (screenState as ResultOf.Failure).message,
                 onClickRetry = { booleanViewModel.getNewQuestion() })
-        }
-        screenState is ResultOf.Loading -> {
-            LoadingScreen()
         }
     }
 }

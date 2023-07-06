@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
-import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundBox
+import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 
 @Composable
@@ -26,7 +26,7 @@ fun FailureScreen(message: String, onClickRetry: () -> Unit) {
         Button(
             modifier = Modifier.padding(top = 16.dp),
             onClick = { onClickRetry() },
-            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundBox),
+            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryBackgroundPink),
             shape = RoundedCornerShape(25.dp),
             border = BorderStroke(
                 1.dp,

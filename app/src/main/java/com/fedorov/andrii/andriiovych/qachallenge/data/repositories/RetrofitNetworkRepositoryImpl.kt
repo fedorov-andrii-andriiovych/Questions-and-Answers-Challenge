@@ -1,8 +1,9 @@
 package com.fedorov.andrii.andriiovych.qachallenge.data.repositories
 
 import android.text.Html
-import com.fedorov.andrii.andriiovych.qachallenge.data.model.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
+import com.fedorov.andrii.andriiovych.qachallenge.domain.model.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
 import javax.inject.Inject
 
 class RetrofitNetworkRepositoryImpl @Inject constructor(private val questionServices: QuestionServices) :

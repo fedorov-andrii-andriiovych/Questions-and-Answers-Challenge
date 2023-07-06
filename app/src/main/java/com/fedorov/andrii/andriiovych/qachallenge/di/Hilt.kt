@@ -1,13 +1,12 @@
 package com.fedorov.andrii.andriiovych.qachallenge.di
 
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
-import com.fedorov.andrii.andriiovych.qachallenge.data.repositories.NetworkRepository
 import com.fedorov.andrii.andriiovych.qachallenge.data.repositories.RetrofitNetworkRepositoryImpl
+import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit

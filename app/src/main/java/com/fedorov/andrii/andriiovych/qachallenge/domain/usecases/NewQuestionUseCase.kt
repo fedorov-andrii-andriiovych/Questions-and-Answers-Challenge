@@ -1,7 +1,7 @@
 package com.fedorov.andrii.andriiovych.qachallenge.domain.usecases
 
-import com.fedorov.andrii.andriiovych.qachallenge.data.model.QuestionModel
-import com.fedorov.andrii.andriiovych.qachallenge.data.repositories.NetworkRepository
+import com.fedorov.andrii.andriiovych.qachallenge.domain.model.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
 import javax.inject.Inject
 
 class NewQuestionUseCase @Inject constructor(private val networkRepository: NetworkRepository) {

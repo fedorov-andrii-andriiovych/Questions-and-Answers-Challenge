@@ -2,8 +2,8 @@ package com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fedorov.andrii.andriiovych.qachallenge.data.model.CategoryModel
-import com.fedorov.andrii.andriiovych.qachallenge.data.model.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.model.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.model.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
@@ -46,7 +46,7 @@ class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQ
             }
             screenState.value = ResultOf.Success
         } catch (e: Exception) {
-            screenState.value = ResultOf.Failure(message = "Something went wrong, please reload the page.")
+            screenState.value = ResultOf.Failure(message = MainViewModel.SOMETHING_WENT_WRONG)
         }
     }
 

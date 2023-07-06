@@ -2,8 +2,8 @@ package com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fedorov.andrii.andriiovych.qachallenge.data.model.CategoryModel
-import com.fedorov.andrii.andriiovych.qachallenge.data.model.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.model.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.model.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
@@ -41,14 +41,14 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
             }
             screenState.value = ResultOf.Success
         }catch (e:Exception){
-            screenState.value = ResultOf.Failure(message = "Something went wrong, please reload the page.")
+            screenState.value = ResultOf.Failure(message = MainViewModel.SOMETHING_WENT_WRONG)
         }
     }
 
     fun checkCorrectAnswer(numberButton: Int) {
         when (numberButton) {
             0 -> {
-                if ("True" == questionState.value.correct_answer) {
+                if (TRUE == questionState.value.correct_answer) {
                     button0ColorState.value = ButtonBackgroundTrue
                     updateQuestion()
                 } else {
@@ -56,7 +56,7 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
                 }
             }
             1 -> {
-                if ("False" == questionState.value.correct_answer) {
+                if (FALSE == questionState.value.correct_answer) {
                     button1ColorState.value = ButtonBackgroundTrue
                     updateQuestion()
                 } else {
@@ -69,5 +69,10 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
     private fun updateQuestion() = viewModelScope.launch(Dispatchers.IO) {
         delay(500)
         getNewQuestion()
+    }
+
+    companion object{
+        private const val FALSE = "False"
+        private const val TRUE = "True"
     }
 }

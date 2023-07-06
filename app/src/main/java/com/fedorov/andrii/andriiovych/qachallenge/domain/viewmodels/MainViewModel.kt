@@ -2,7 +2,7 @@ package com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.data.model.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.model.CategoryModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -57,4 +57,9 @@ class MainViewModel @Inject constructor() :
         CategoryModel("Cartoon & Animations", 32),
     )
     val typeState = mutableStateOf(QuestionType.ANY)
+
+    companion object{
+        const val SOMETHING_WENT_WRONG = "Something went wrong, please reload the page"
+    }
+
 }

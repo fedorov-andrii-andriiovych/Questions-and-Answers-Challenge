@@ -1,14 +1,13 @@
 package com.fedorov.andrii.andriiovych.qachallenge.data.repositories
 
 import android.text.Html
-import android.util.Log
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.NetworkException
-import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionResponse
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.UserToken
-import com.fedorov.andrii.andriiovych.qachallenge.domain.model.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.data.network.models.QuestionResponse
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
-import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.ResultOf
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import com.google.gson.Gson
 import retrofit2.Response
 import java.net.ConnectException
@@ -17,13 +16,19 @@ import javax.inject.Inject
 
 private const val SOMETHING_WENT_WRONG = "Something went wrong, please reload the page"
 
-class RetrofitNetworkRepositoryImpl @Inject constructor(private val questionServices: QuestionServices, private val userToken:UserToken) :
+class RetrofitNetworkRepositoryImpl @Inject constructor(
+    private val questionServices: QuestionServices,
+    private val userToken: UserToken
+) :
     NetworkRepository {
 
-    override suspend fun getNewToken() {
-        try {
+    override suspend fun getNewToken(): Boolean {
+        return try {
             userToken.token = questionServices.getNewToken().token
-        }finally {}
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 
     override suspend fun getNewQuestion(

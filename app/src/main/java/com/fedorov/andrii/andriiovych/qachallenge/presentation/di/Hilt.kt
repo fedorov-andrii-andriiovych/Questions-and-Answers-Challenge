@@ -1,4 +1,4 @@
-package com.fedorov.andrii.andriiovych.qachallenge.di
+package com.fedorov.andrii.andriiovych.qachallenge.presentation.di
 
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.UserToken

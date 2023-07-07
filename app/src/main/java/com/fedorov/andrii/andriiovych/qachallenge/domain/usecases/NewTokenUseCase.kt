@@ -5,6 +5,8 @@ import javax.inject.Inject
 
 class NewTokenUseCase @Inject constructor(private val networkRepository: NetworkRepository) {
 
-    suspend fun getNewToken() = networkRepository.getNewToken()
+    suspend fun getNewToken():Boolean{
+       return networkRepository.getNewToken()
+    }
 
 }

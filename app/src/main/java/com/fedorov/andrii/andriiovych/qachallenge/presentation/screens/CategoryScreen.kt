@@ -21,8 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
-import com.fedorov.andrii.andriiovych.qachallenge.domain.model.CategoryModel
-import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.MainViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MainViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 @Composable

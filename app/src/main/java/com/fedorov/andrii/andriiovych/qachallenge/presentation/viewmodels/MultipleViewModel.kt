@@ -1,9 +1,10 @@
-package com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels
+package com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fedorov.andrii.andriiovych.qachallenge.domain.model.CategoryModel
-import com.fedorov.andrii.andriiovych.qachallenge.domain.model.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
@@ -12,35 +13,41 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQuestionUseCase) :
     ViewModel() {
-    val screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
-    val button0ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val button1ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val button2ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val button3ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val difficultyState = MutableStateFlow(QuestionDifficulty.ANY)
+    private val _screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
+    val screenState:StateFlow<ResultOf<QuestionModel>> = _screenState
+    private val _button0ColorState = MutableStateFlow(PrimaryBackgroundPink)
+    val button0ColorState:StateFlow<Color> = _button0ColorState
+    private val _button1ColorState = MutableStateFlow(PrimaryBackgroundPink)
+    val button1ColorState:StateFlow<Color> = _button1ColorState
+    private val _button2ColorState = MutableStateFlow(PrimaryBackgroundPink)
+    val button2ColorState:StateFlow<Color> = _button2ColorState
+    private val _button3ColorState = MutableStateFlow(PrimaryBackgroundPink)
+    val button3ColorState:StateFlow<Color> = _button3ColorState
+    private val difficultyState = MutableStateFlow(QuestionDifficulty.ANY)
     val questionState = MutableStateFlow(QuestionModel())
     val categoryState = MutableStateFlow(CategoryModel())
 
     fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
-        screenState.value = ResultOf.Loading
+        _screenState.value = ResultOf.Loading
         val result =
             newQuestionUseCase.getNewQuestion(
                 category = categoryState.value.id,
                 type = QuestionType.MULTIPLE.value,
                 difficulty = difficultyState.value.value
             )
-        screenState.value = result
+        _screenState.value = result
         if (result is ResultOf.Success<QuestionModel>){
-            button0ColorState.value = PrimaryBackgroundPink
-            button1ColorState.value = PrimaryBackgroundPink
-            button2ColorState.value = PrimaryBackgroundPink
-            button3ColorState.value = PrimaryBackgroundPink
+           _button0ColorState.value = PrimaryBackgroundPink
+           _button1ColorState.value = PrimaryBackgroundPink
+           _button2ColorState.value = PrimaryBackgroundPink
+           _button3ColorState.value = PrimaryBackgroundPink
             questionState.value = result.value
         }
     }
@@ -49,34 +56,34 @@ class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQ
         when (numberButton) {
             0 -> {
                 if (questionState.value.answers[0] == questionState.value.correct_answer) {
-                    button0ColorState.value = ButtonBackgroundTrue
+                    _button0ColorState.value = ButtonBackgroundTrue
                     updateQuestion()
                 } else {
-                    button0ColorState.value = ButtonBackgroundFalse
+                    _button0ColorState.value = ButtonBackgroundFalse
                 }
             }
             1 -> {
                 if (questionState.value.answers[1] == questionState.value.correct_answer) {
-                    button1ColorState.value = ButtonBackgroundTrue
+                    _button1ColorState.value = ButtonBackgroundTrue
                     updateQuestion()
                 } else {
-                    button1ColorState.value = ButtonBackgroundFalse
+                    _button1ColorState.value = ButtonBackgroundFalse
                 }
             }
             2 -> {
                 if (questionState.value.answers[2] == questionState.value.correct_answer) {
-                    button2ColorState.value = ButtonBackgroundTrue
+                    _button2ColorState.value = ButtonBackgroundTrue
                     updateQuestion()
                 } else {
-                    button2ColorState.value = ButtonBackgroundFalse
+                    _button2ColorState.value = ButtonBackgroundFalse
                 }
             }
             3 -> {
                 if (questionState.value.answers[3] == questionState.value.correct_answer) {
-                    button3ColorState.value = ButtonBackgroundTrue
+                    _button3ColorState.value = ButtonBackgroundTrue
                     updateQuestion()
                 } else {
-                    button3ColorState.value = ButtonBackgroundFalse
+                    _button3ColorState.value = ButtonBackgroundFalse
                 }
             }
         }

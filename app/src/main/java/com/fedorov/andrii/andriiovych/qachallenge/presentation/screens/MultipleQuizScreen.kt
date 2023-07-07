@@ -20,8 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.MultipleViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.ResultOf
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MultipleViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 @Composable

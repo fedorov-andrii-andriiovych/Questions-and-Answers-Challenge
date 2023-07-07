@@ -1,4 +1,4 @@
-package com.fedorov.andrii.andriiovych.qachallenge.domain.model
+package com.fedorov.andrii.andriiovych.qachallenge.domain.models
 
 data class QuestionModel(
     val category: String = "",

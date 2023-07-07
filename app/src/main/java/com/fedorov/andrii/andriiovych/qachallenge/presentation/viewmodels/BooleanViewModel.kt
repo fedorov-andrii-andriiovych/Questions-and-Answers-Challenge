@@ -1,9 +1,10 @@
-package com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels
+package com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fedorov.andrii.andriiovych.qachallenge.domain.model.CategoryModel
-import com.fedorov.andrii.andriiovych.qachallenge.domain.model.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
@@ -12,30 +13,34 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQuestionUseCase) :
     ViewModel() {
-    val screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
-    val button0ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val button1ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val difficultyState = MutableStateFlow(QuestionDifficulty.ANY)
+    private val _screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
+    val screenState:StateFlow<ResultOf<QuestionModel>> = _screenState
+    private val _button0ColorState = MutableStateFlow(PrimaryBackgroundPink)
+    val button0ColorState:StateFlow<Color> = _button0ColorState
+    private val _button1ColorState = MutableStateFlow(PrimaryBackgroundPink)
+    val button1ColorState:StateFlow<Color> = _button1ColorState
+    private val difficultyState = MutableStateFlow(QuestionDifficulty.ANY)
     val questionState = MutableStateFlow(QuestionModel())
     val categoryState = MutableStateFlow(CategoryModel())
     fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
-        screenState.value = ResultOf.Loading
+        _screenState.value = ResultOf.Loading
         val result =
             newQuestionUseCase.getNewQuestion(
                 category = categoryState.value.id,
                 type = QuestionType.BOOLEAN.value,
                 difficulty = difficultyState.value.value
             )
-        screenState.value = result
+        _screenState.value = result
         if (result is ResultOf.Success<QuestionModel>){
-            button0ColorState.value = PrimaryBackgroundPink
-            button1ColorState.value = PrimaryBackgroundPink
+            _button0ColorState.value = PrimaryBackgroundPink
+            _button1ColorState.value = PrimaryBackgroundPink
             questionState.value = result.value
         }
     }
@@ -44,18 +49,18 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
         when (numberButton) {
             0 -> {
                 if (TRUE == questionState.value.correct_answer) {
-                    button0ColorState.value = ButtonBackgroundTrue
+                    _button0ColorState.value = ButtonBackgroundTrue
                     updateQuestion()
                 } else {
-                    button0ColorState.value = ButtonBackgroundFalse
+                    _button0ColorState.value = ButtonBackgroundFalse
                 }
             }
             1 -> {
                 if (FALSE == questionState.value.correct_answer) {
-                    button1ColorState.value = ButtonBackgroundTrue
+                    _button1ColorState.value = ButtonBackgroundTrue
                     updateQuestion()
                 } else {
-                    button1ColorState.value = ButtonBackgroundFalse
+                   _button1ColorState.value = ButtonBackgroundFalse
                 }
             }
         }

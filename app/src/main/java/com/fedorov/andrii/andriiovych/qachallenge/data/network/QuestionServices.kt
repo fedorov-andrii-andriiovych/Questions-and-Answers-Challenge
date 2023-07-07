@@ -1,5 +1,7 @@
 package com.fedorov.andrii.andriiovych.qachallenge.data.network
 
+import com.fedorov.andrii.andriiovych.qachallenge.data.network.models.QuestionResponse
+import com.fedorov.andrii.andriiovych.qachallenge.data.network.models.TokenResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

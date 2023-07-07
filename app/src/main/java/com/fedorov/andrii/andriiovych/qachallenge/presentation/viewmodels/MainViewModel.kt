@@ -1,12 +1,13 @@
-package com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels
+package com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fedorov.andrii.andriiovych.qachallenge.domain.model.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -67,8 +68,12 @@ class MainViewModel @Inject constructor(private val newTokenUseCase: NewTokenUse
     )
     val typeState = mutableStateOf(QuestionType.ANY)
 
-    private fun getNewToken() = viewModelScope.launch (Dispatchers.IO) {
-        newTokenUseCase.getNewToken()
+    private fun getNewToken() = viewModelScope.launch(Dispatchers.IO) {
+        while (true) {
+            val result = newTokenUseCase.getNewToken()
+            if (result) break
+            delay(10000)
+        }
     }
-
 }
+

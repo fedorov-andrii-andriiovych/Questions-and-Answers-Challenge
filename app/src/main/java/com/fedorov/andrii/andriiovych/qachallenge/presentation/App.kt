@@ -1,4 +1,4 @@
-package com.fedorov.andrii.andriiovych.qachallenge
+package com.fedorov.andrii.andriiovych.qachallenge.presentation
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

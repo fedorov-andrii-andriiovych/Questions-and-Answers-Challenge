@@ -20,8 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
-import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.MainViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.domain.viewmodels.QuestionType
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MainViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.QuestionType
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 

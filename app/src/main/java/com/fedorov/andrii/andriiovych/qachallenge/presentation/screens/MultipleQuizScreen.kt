@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MultipleViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
@@ -31,135 +32,158 @@ fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier)
     val button1ColorState by multipleViewModel.button1ColorState.collectAsState()
     val button2ColorState by multipleViewModel.button2ColorState.collectAsState()
     val button3ColorState by multipleViewModel.button3ColorState.collectAsState()
-    val questionState by multipleViewModel.questionState.collectAsState()
-    val categoryState by multipleViewModel.categoryState.collectAsState()
 
     when (screenState) {
-        is ResultOf.Success, ResultOf.Loading -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .clip(shape = RoundedCornerShape(25.dp))
-                        .background(color = PrimaryBackgroundPink)
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
-
-                ) {
-                    Text(
-                        text = categoryState.name,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f), contentAlignment = Alignment.Center
-                ) {
-                    if (screenState is ResultOf.Loading) {
-                        CircularProgressIndicator(color = PrimaryBackgroundPink)
-                    } else {
-                        Text(
-                            text = questionState.question,
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-
-                Button(
-                    onClick = { multipleViewModel.checkCorrectAnswer(0) },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = button0ColorState),
-                    shape = RoundedCornerShape(25.dp),
-                    border = BorderStroke(
-                        1.dp,
-                        Color.Black
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                ) {
-                    Text(
-                        text = questionState.answers[0],
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-                Button(
-                    onClick = { multipleViewModel.checkCorrectAnswer(1) },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = button1ColorState),
-                    shape = RoundedCornerShape(25.dp),
-                    border = BorderStroke(
-                        1.dp,
-                        Color.Black
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                ) {
-                    Text(
-                        text = questionState.answers[1],
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-                Button(
-                    onClick = { multipleViewModel.checkCorrectAnswer(2) },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = button2ColorState),
-                    shape = RoundedCornerShape(25.dp),
-                    border = BorderStroke(
-                        1.dp,
-                        Color.Black
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                ) {
-                    Text(
-                        text = questionState.answers[2],
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-                Button(
-                    onClick = { multipleViewModel.checkCorrectAnswer(3) },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = button3ColorState),
-                    shape = RoundedCornerShape(25.dp),
-                    border = BorderStroke(
-                        1.dp,
-                        Color.Black
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                ) {
-                    Text(
-                        text = questionState.answers[3],
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-
-            }
+        is ResultOf.Success -> {
+            val questionModel = (screenState as ResultOf.Success<QuestionModel>).value
+            MultipleSuccessScreen(
+                questionModel = questionModel,
+                onButton_0_Clicked = {multipleViewModel.checkCorrectAnswer(0)},
+                onButton_1_Clicked = {multipleViewModel.checkCorrectAnswer(1)},
+                onButton_2_Clicked = {multipleViewModel.checkCorrectAnswer(2)},
+                onButton_3_Clicked = {multipleViewModel.checkCorrectAnswer(3)},
+                button_0_ColorState = button0ColorState,
+                button_1_ColorState = button1ColorState,
+                button_2_ColorState = button2ColorState,
+                button_3_ColorState = button3ColorState
+            )
         }
         is ResultOf.Failure -> {
             FailureScreen(
                 message = (screenState as ResultOf.Failure).message,
                 onClickRetry = { multipleViewModel.getNewQuestion() })
         }
+        is ResultOf.Loading -> {
+            LoadingScreen()
+        }
     }
 
+}
+
+@Composable
+fun MultipleSuccessScreen(
+    questionModel: QuestionModel,
+    onButton_0_Clicked: () -> Unit,
+    onButton_1_Clicked: () -> Unit,
+    onButton_2_Clicked: () -> Unit,
+    onButton_3_Clicked: () -> Unit,
+    button_0_ColorState: Color,
+    button_1_ColorState: Color,
+    button_2_ColorState: Color,
+    button_3_ColorState: Color
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .clip(shape = RoundedCornerShape(25.dp))
+                .background(color = PrimaryBackgroundPink)
+                .fillMaxWidth()
+                .height(60.dp)
+                .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
+
+        ) {
+            Text(
+                text = questionModel.category,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f), contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = questionModel.question,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        Button(
+            onClick = { onButton_0_Clicked() },
+            colors = ButtonDefaults.buttonColors(backgroundColor = button_0_ColorState),
+            shape = RoundedCornerShape(25.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Black
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        ) {
+            Text(
+                text = questionModel.answers[0],
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+        Button(
+            onClick = { onButton_1_Clicked() },
+            colors = ButtonDefaults.buttonColors(backgroundColor = button_1_ColorState),
+            shape = RoundedCornerShape(25.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Black
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        ) {
+            Text(
+                text = questionModel.answers[1],
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+        Button(
+            onClick = { onButton_2_Clicked() },
+            colors = ButtonDefaults.buttonColors(backgroundColor = button_2_ColorState),
+            shape = RoundedCornerShape(25.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Black
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        ) {
+            Text(
+                text = questionModel.answers[2],
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+        Button(
+            onClick = { onButton_3_Clicked() },
+            colors = ButtonDefaults.buttonColors(backgroundColor = button_3_ColorState),
+            shape = RoundedCornerShape(25.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Black
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        ) {
+            Text(
+                text = questionModel.answers[3],
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+
+    }
 }

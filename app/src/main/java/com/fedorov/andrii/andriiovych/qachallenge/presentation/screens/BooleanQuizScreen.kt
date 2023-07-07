@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.BooleanViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
@@ -29,95 +29,110 @@ import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 @Composable
 fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
     val screenState by booleanViewModel.screenState.collectAsState()
-    val button0ColorState by booleanViewModel.button0ColorState.collectAsState()
-    val button1ColorState by booleanViewModel.button1ColorState.collectAsState()
-    val questionState by booleanViewModel.questionState.collectAsState()
-    val categoryState by booleanViewModel.categoryState.collectAsState()
+    val buttonTrueColorState by booleanViewModel.buttonTrueColorState.collectAsState()
+    val buttonFalseColorState by booleanViewModel.buttonFalseColorState.collectAsState()
     when (screenState) {
-        is ResultOf.Success, ResultOf.Loading -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .clip(shape = RoundedCornerShape(25.dp))
-                        .background(color = PrimaryBackgroundPink)
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
-
-                ) {
-                    Text(
-                        text = categoryState.name,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f), contentAlignment = Alignment.Center
-                ) {
-                    if (screenState is ResultOf.Loading) {
-                        CircularProgressIndicator(color = PrimaryBackgroundPink)
-                    } else {
-                        Text(
-                            text = questionState.question,
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-
-                Button(
-                    onClick = { booleanViewModel.checkCorrectAnswer(0) },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = button0ColorState),
-                    shape = RoundedCornerShape(25.dp),
-                    border = BorderStroke(
-                        1.dp,
-                        Color.Black
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.tru),
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-                Button(
-                    onClick = { booleanViewModel.checkCorrectAnswer(1) },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = button1ColorState),
-                    shape = RoundedCornerShape(25.dp),
-                    border = BorderStroke(
-                        1.dp,
-                        Color.Black
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(R.string.fals),
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-
-            }
+        is ResultOf.Success<QuestionModel> -> {
+            val questionModel = (screenState as ResultOf.Success<QuestionModel>).value
+            BooleanSuccessScreen(
+                questionModel = questionModel,
+                onTrueClicked = { booleanViewModel.checkCorrectAnswer(true) },
+                onFalseClicked = { booleanViewModel.checkCorrectAnswer(false)},
+                buttonTrueColorState,
+                buttonFalseColorState
+            )
         }
         is ResultOf.Failure -> {
             FailureScreen(
                 message = (screenState as ResultOf.Failure).message,
                 onClickRetry = { booleanViewModel.getNewQuestion() })
         }
+        is ResultOf.Loading -> {
+            LoadingScreen()
+        }
+    }
+}
+
+@Composable
+fun BooleanSuccessScreen(
+    questionModel: QuestionModel,
+    onTrueClicked: () -> Unit,
+    onFalseClicked: () -> Unit,
+    buttonTrueColorState: Color,
+    buttonFalseColorState: Color,
+    ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .clip(shape = RoundedCornerShape(25.dp))
+                .background(color = PrimaryBackgroundPink)
+                .fillMaxWidth()
+                .height(60.dp)
+                .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
+
+        ) {
+            Text(
+                text = questionModel.category,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f), contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = questionModel.question,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        Button(
+            onClick = { onTrueClicked() },
+            colors = ButtonDefaults.buttonColors(backgroundColor = buttonTrueColorState),
+            shape = RoundedCornerShape(25.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Black
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.tru),
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+        Button(
+            onClick = { onFalseClicked() },
+            colors = ButtonDefaults.buttonColors(backgroundColor = buttonFalseColorState),
+            shape = RoundedCornerShape(25.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Black
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(R.string.fals),
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+
     }
 }

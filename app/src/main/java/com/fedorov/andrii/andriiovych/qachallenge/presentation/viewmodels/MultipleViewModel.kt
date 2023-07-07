@@ -30,17 +30,18 @@ class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQ
     val button2ColorState:StateFlow<Color> = _button2ColorState
     private val _button3ColorState = MutableStateFlow(PrimaryBackgroundPink)
     val button3ColorState:StateFlow<Color> = _button3ColorState
-    private val difficultyState = MutableStateFlow(QuestionDifficulty.ANY)
-    val questionState = MutableStateFlow(QuestionModel())
-    val categoryState = MutableStateFlow(CategoryModel())
+    private val questionState = MutableStateFlow(QuestionModel())
+
+    var categoryState = CategoryModel()
+    var difficultyState = QuestionDifficulty.ANY
 
     fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
         _screenState.value = ResultOf.Loading
         val result =
             newQuestionUseCase.getNewQuestion(
-                category = categoryState.value.id,
+                category = categoryState.id,
                 type = QuestionType.MULTIPLE.value,
-                difficulty = difficultyState.value.value
+                difficulty = difficultyState.value
             )
         _screenState.value = result
         if (result is ResultOf.Success<QuestionModel>){

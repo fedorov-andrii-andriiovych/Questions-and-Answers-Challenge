@@ -22,45 +22,46 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
     ViewModel() {
     private val _screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
     val screenState:StateFlow<ResultOf<QuestionModel>> = _screenState
-    private val _button0ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val button0ColorState:StateFlow<Color> = _button0ColorState
-    private val _button1ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val button1ColorState:StateFlow<Color> = _button1ColorState
-    private val difficultyState = MutableStateFlow(QuestionDifficulty.ANY)
-    val questionState = MutableStateFlow(QuestionModel())
-    val categoryState = MutableStateFlow(CategoryModel())
+    private val _buttonTrueColorState = MutableStateFlow(PrimaryBackgroundPink)
+    val buttonTrueColorState:StateFlow<Color> = _buttonTrueColorState
+    private val _buttonFalseColorState = MutableStateFlow(PrimaryBackgroundPink)
+    val buttonFalseColorState:StateFlow<Color> = _buttonFalseColorState
+    private val questionState = MutableStateFlow(QuestionModel())
+
+    var difficultyState = QuestionDifficulty.ANY
+    var categoryState = CategoryModel()
     fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
         _screenState.value = ResultOf.Loading
         val result =
             newQuestionUseCase.getNewQuestion(
-                category = categoryState.value.id,
+                category = categoryState.id,
                 type = QuestionType.BOOLEAN.value,
-                difficulty = difficultyState.value.value
+                difficulty = difficultyState.value
             )
         _screenState.value = result
         if (result is ResultOf.Success<QuestionModel>){
-            _button0ColorState.value = PrimaryBackgroundPink
-            _button1ColorState.value = PrimaryBackgroundPink
+            _buttonTrueColorState.value = PrimaryBackgroundPink
+            _buttonFalseColorState.value = PrimaryBackgroundPink
             questionState.value = result.value
         }
     }
 
-    fun checkCorrectAnswer(numberButton: Int) {
-        when (numberButton) {
-            0 -> {
+    fun checkCorrectAnswer(clickedButton:Boolean) {
+        when (clickedButton) {
+            true -> {
                 if (TRUE == questionState.value.correct_answer) {
-                    _button0ColorState.value = ButtonBackgroundTrue
+                    _buttonTrueColorState.value = ButtonBackgroundTrue
                     updateQuestion()
                 } else {
-                    _button0ColorState.value = ButtonBackgroundFalse
+                    _buttonTrueColorState.value = ButtonBackgroundFalse
                 }
             }
-            1 -> {
+            false -> {
                 if (FALSE == questionState.value.correct_answer) {
-                    _button1ColorState.value = ButtonBackgroundTrue
+                    _buttonFalseColorState.value = ButtonBackgroundTrue
                     updateQuestion()
                 } else {
-                   _button1ColorState.value = ButtonBackgroundFalse
+                   _buttonFalseColorState.value = ButtonBackgroundFalse
                 }
             }
         }

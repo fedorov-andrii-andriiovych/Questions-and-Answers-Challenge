@@ -53,40 +53,34 @@ class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQ
     }
 
     fun checkCorrectAnswer(numberButton: Int) {
-        when (numberButton) {
-            0 -> {
-                if (questionState.value.answers[0] == questionState.value.correct_answer) {
-                    _button0ColorState.value = ButtonBackgroundTrue
-                    updateQuestion()
-                } else {
-                    _button0ColorState.value = ButtonBackgroundFalse
-                }
-            }
-            1 -> {
-                if (questionState.value.answers[1] == questionState.value.correct_answer) {
-                    _button1ColorState.value = ButtonBackgroundTrue
-                    updateQuestion()
-                } else {
-                    _button1ColorState.value = ButtonBackgroundFalse
-                }
-            }
-            2 -> {
-                if (questionState.value.answers[2] == questionState.value.correct_answer) {
-                    _button2ColorState.value = ButtonBackgroundTrue
-                    updateQuestion()
-                } else {
-                    _button2ColorState.value = ButtonBackgroundFalse
-                }
-            }
-            3 -> {
-                if (questionState.value.answers[3] == questionState.value.correct_answer) {
-                    _button3ColorState.value = ButtonBackgroundTrue
-                    updateQuestion()
-                } else {
-                    _button3ColorState.value = ButtonBackgroundFalse
-                }
-            }
+        val answers = questionState.value.answers
+        val correctAnswer = questionState.value.correct_answer
+        val colorState = getColorStateForButton(numberButton)
+
+        if (answers[numberButton] == correctAnswer) {
+            correctAnswer(colorState)
+        } else {
+            wrongAnswer(colorState)
         }
+    }
+
+    private fun getColorStateForButton(numberButton: Int): MutableStateFlow<Color> {
+        return when (numberButton) {
+            0 -> _button0ColorState
+            1 -> _button1ColorState
+            2 -> _button2ColorState
+            3 -> _button3ColorState
+            else -> _button0ColorState
+        }
+    }
+
+    private fun correctAnswer(colorState: MutableStateFlow<Color>) {
+        colorState.value = ButtonBackgroundTrue
+        updateQuestion()
+    }
+
+    private fun wrongAnswer(colorState: MutableStateFlow<Color>) {
+        colorState.value = ButtonBackgroundFalse
     }
 
     private fun updateQuestion() = viewModelScope.launch(Dispatchers.Default) {
@@ -95,10 +89,17 @@ class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQ
         getNewQuestion()
     }
 
-    private fun resetButtonColor(){
+    private fun resetButtonColor() {
         _button0ColorState.value = PrimaryBackgroundPink
         _button1ColorState.value = PrimaryBackgroundPink
         _button2ColorState.value = PrimaryBackgroundPink
         _button3ColorState.value = PrimaryBackgroundPink
+    }
+
+    companion object {
+        const val BUTTON_0 = 0
+        const val BUTTON_1 = 1
+        const val BUTTON_2 = 2
+        const val BUTTON_3 = 3
     }
 }

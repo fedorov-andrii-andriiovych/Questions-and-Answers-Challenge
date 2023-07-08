@@ -47,25 +47,33 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
         }
     }
 
-    fun checkCorrectAnswer(clickedButton: Boolean) {
-        when (clickedButton) {
-            true -> {
-                if (TRUE == questionState.value.correct_answer) {
-                    _buttonTrueColorState.value = ButtonBackgroundTrue
-                    updateQuestion()
-                } else {
-                    _buttonTrueColorState.value = ButtonBackgroundFalse
-                }
-            }
-            false -> {
-                if (FALSE == questionState.value.correct_answer) {
-                    _buttonFalseColorState.value = ButtonBackgroundTrue
-                    updateQuestion()
-                } else {
-                    _buttonFalseColorState.value = ButtonBackgroundFalse
-                }
-            }
+    fun checkCorrectAnswer(numberButton: Int) {
+        val answers = questionState.value.answers
+        val correctAnswer = questionState.value.correct_answer
+        val colorState = getColorStateForButton(numberButton)
+
+        if (answers[numberButton] == correctAnswer) {
+            correctAnswer(colorState)
+        } else {
+            wrongAnswer(colorState)
         }
+    }
+
+    private fun getColorStateForButton(numberButton: Int): MutableStateFlow<Color> {
+        return when (numberButton) {
+            0 -> _buttonTrueColorState
+            1 -> _buttonFalseColorState
+            else ->  _buttonTrueColorState
+        }
+    }
+
+    private fun correctAnswer(colorState: MutableStateFlow<Color>) {
+        colorState.value = ButtonBackgroundTrue
+        updateQuestion()
+    }
+
+    private fun wrongAnswer(colorState: MutableStateFlow<Color>) {
+        colorState.value = ButtonBackgroundFalse
     }
 
     private fun updateQuestion() = viewModelScope.launch(Dispatchers.Default) {
@@ -80,7 +88,7 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
     }
 
     companion object {
-        private const val FALSE = "False"
-        private const val TRUE = "True"
+        const val FALSE = 0
+        const val TRUE = 1
     }
 }

@@ -33,8 +33,8 @@ fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
             val questionModel = (screenState as ResultOf.Success<QuestionModel>).value
             BooleanSuccessScreen(
                 questionModel = questionModel,
-                onTrueClicked = { booleanViewModel.checkCorrectAnswer(true) },
-                onFalseClicked = { booleanViewModel.checkCorrectAnswer(false) },
+                onTrueClicked = { booleanViewModel.checkCorrectAnswer(BooleanViewModel.TRUE) },
+                onFalseClicked = { booleanViewModel.checkCorrectAnswer(BooleanViewModel.FALSE) },
                 buttonTrueColorState,
                 buttonFalseColorState
             )

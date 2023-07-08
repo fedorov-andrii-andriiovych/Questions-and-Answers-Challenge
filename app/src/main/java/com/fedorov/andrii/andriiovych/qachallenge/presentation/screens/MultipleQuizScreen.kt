@@ -34,10 +34,10 @@ fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier)
             val questionModel = (screenState as ResultOf.Success<QuestionModel>).value
             MultipleSuccessScreen(
                 questionModel = questionModel,
-                onButton_0_Clicked = { multipleViewModel.checkCorrectAnswer(0) },
-                onButton_1_Clicked = { multipleViewModel.checkCorrectAnswer(1) },
-                onButton_2_Clicked = { multipleViewModel.checkCorrectAnswer(2) },
-                onButton_3_Clicked = { multipleViewModel.checkCorrectAnswer(3) },
+                onButton_0_Clicked = { multipleViewModel.checkCorrectAnswer(MultipleViewModel.BUTTON_0) },
+                onButton_1_Clicked = { multipleViewModel.checkCorrectAnswer(MultipleViewModel.BUTTON_1) },
+                onButton_2_Clicked = { multipleViewModel.checkCorrectAnswer(MultipleViewModel.BUTTON_2) },
+                onButton_3_Clicked = { multipleViewModel.checkCorrectAnswer(MultipleViewModel.BUTTON_3) },
                 button_0_ColorState = button0ColorState,
                 button_1_ColorState = button1ColorState,
                 button_2_ColorState = button2ColorState,

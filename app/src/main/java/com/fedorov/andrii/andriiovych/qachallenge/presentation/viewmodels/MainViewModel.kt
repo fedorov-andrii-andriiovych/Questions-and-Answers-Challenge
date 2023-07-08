@@ -36,6 +36,7 @@ enum class QuestionDifficulty(val value: String) {
 @HiltViewModel
 class MainViewModel @Inject constructor(private val newTokenUseCase: NewTokenUseCase) :
     ViewModel() {
+    private var tryGetTokenCount = 0
     init {
         getNewToken()
     }
@@ -69,10 +70,11 @@ class MainViewModel @Inject constructor(private val newTokenUseCase: NewTokenUse
     val typeState = mutableStateOf(QuestionType.ANY)
 
     private fun getNewToken() = viewModelScope.launch(Dispatchers.IO) {
-        while (true) {
+        while (tryGetTokenCount < 10) {
             val result = newTokenUseCase.getNewToken()
             if (result) break
             delay(10000)
+            tryGetTokenCount++
         }
     }
 }

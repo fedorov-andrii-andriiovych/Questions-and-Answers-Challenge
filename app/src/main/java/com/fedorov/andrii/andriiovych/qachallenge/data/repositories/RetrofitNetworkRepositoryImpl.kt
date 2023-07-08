@@ -6,6 +6,7 @@ import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.UserToken
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.models.QuestionResponse
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import com.google.gson.Gson
@@ -32,16 +33,14 @@ class RetrofitNetworkRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNewQuestion(
-        category: Int,
-        difficulty: String,
-        type: String
+        questionParams: QuestionParams
     ): ResultOf<QuestionModel> {
         return try {
             val result = parseResponse(
                 questionServices.getNewQuestion(
-                    category = category,
-                    difficulty = difficulty,
-                    type = type,
+                    category = questionParams.category,
+                    difficulty = questionParams.difficulty,
+                    type = questionParams.type,
                     token = userToken.token
                 )
             )

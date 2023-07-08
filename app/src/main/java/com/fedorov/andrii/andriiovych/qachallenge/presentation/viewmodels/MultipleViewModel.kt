@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
@@ -21,15 +22,15 @@ import javax.inject.Inject
 class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQuestionUseCase) :
     ViewModel() {
     private val _screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
-    val screenState:StateFlow<ResultOf<QuestionModel>> = _screenState
+    val screenState: StateFlow<ResultOf<QuestionModel>> = _screenState
     private val _button0ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val button0ColorState:StateFlow<Color> = _button0ColorState
+    val button0ColorState: StateFlow<Color> = _button0ColorState
     private val _button1ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val button1ColorState:StateFlow<Color> = _button1ColorState
+    val button1ColorState: StateFlow<Color> = _button1ColorState
     private val _button2ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val button2ColorState:StateFlow<Color> = _button2ColorState
+    val button2ColorState: StateFlow<Color> = _button2ColorState
     private val _button3ColorState = MutableStateFlow(PrimaryBackgroundPink)
-    val button3ColorState:StateFlow<Color> = _button3ColorState
+    val button3ColorState: StateFlow<Color> = _button3ColorState
     private val questionState = MutableStateFlow(QuestionModel())
 
     var categoryState = CategoryModel()
@@ -39,16 +40,18 @@ class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQ
         _screenState.value = ResultOf.Loading
         val result =
             newQuestionUseCase.getNewQuestion(
-                category = categoryState.id,
-                type = QuestionType.MULTIPLE.value,
-                difficulty = difficultyState.value
+                QuestionParams(
+                    category = categoryState.id,
+                    type = QuestionType.MULTIPLE.value,
+                    difficulty = difficultyState.value
+                )
             )
         _screenState.value = result
-        if (result is ResultOf.Success<QuestionModel>){
-           _button0ColorState.value = PrimaryBackgroundPink
-           _button1ColorState.value = PrimaryBackgroundPink
-           _button2ColorState.value = PrimaryBackgroundPink
-           _button3ColorState.value = PrimaryBackgroundPink
+        if (result is ResultOf.Success<QuestionModel>) {
+            _button0ColorState.value = PrimaryBackgroundPink
+            _button1ColorState.value = PrimaryBackgroundPink
+            _button2ColorState.value = PrimaryBackgroundPink
+            _button3ColorState.value = PrimaryBackgroundPink
             questionState.value = result.value
         }
     }

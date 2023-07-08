@@ -1,6 +1,7 @@
 package com.fedorov.andrii.andriiovych.qachallenge.domain.usecases
 
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import kotlinx.coroutines.runBlocking
@@ -32,11 +33,11 @@ class NewQuestionUseCaseTest {
                 type = BOOLEAN
             )
         )
-        Mockito.`when`(networkRepository.getNewQuestion(anyInt(), anyString(), anyString())).thenReturn(testData)
+        Mockito.`when`(networkRepository.getNewQuestion(QuestionParams())).thenReturn(testData)
 
         val useCase = NewQuestionUseCase(networkRepository = networkRepository)
 
-        val result = useCase.getNewQuestion(anyInt(), anyString(), anyString()) as ResultOf.Success
+        val result = useCase.getNewQuestion(QuestionParams()) as ResultOf.Success
         val actual = result.value
         val expected = QuestionModel(category = ONE, difficulty = HARD, type = BOOLEAN)
 
@@ -47,11 +48,11 @@ class NewQuestionUseCaseTest {
     fun `should return error from repository`()  = runBlocking {
 
         val testData = ResultOf.Failure(message = ERROR)
-        Mockito.`when`(networkRepository.getNewQuestion(anyInt(), anyString(), anyString())).thenReturn(testData)
+        Mockito.`when`(networkRepository.getNewQuestion(QuestionParams())).thenReturn(testData)
 
         val useCase = NewQuestionUseCase(networkRepository = networkRepository)
 
-        val result = useCase.getNewQuestion(anyInt(), anyString(), anyString()) as ResultOf.Failure
+        val result = useCase.getNewQuestion(QuestionParams()) as ResultOf.Failure
         val actual = result.message
         val expected = ERROR
 

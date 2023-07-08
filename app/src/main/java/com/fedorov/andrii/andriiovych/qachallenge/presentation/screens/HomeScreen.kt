@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MainViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.QuestionType
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
@@ -31,31 +32,18 @@ fun HomeScreen(
     mainViewModel: MainViewModel,
     onClickType: (QuestionType) -> Unit
 ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly) {
+    TopText(text = stringResource(R.string.qa_chalenge))
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
+    ) {
         Box(
-            contentAlignment = Alignment.Center,
             modifier = Modifier
-                .clip(shape = RoundedCornerShape(25.dp))
-                .background(color = PrimaryBackgroundPink)
                 .fillMaxWidth()
-                .height(60.dp)
-                .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
-
+                .weight(1f), contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = stringResource(R.string.qa_chalenge),
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f), contentAlignment = Alignment.Center
-        ) {
-            Image(painter = painterResource(id = R.drawable.qa ), contentDescription = "qa")
+            Image(painter = painterResource(id = R.drawable.qa), contentDescription = "qa")
         }
 
         Button(
@@ -66,7 +54,9 @@ fun HomeScreen(
                 1.dp,
                 Color.Black
             ),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp)
         ) {
             Text(
                 text = stringResource(R.string.multiple_choice),

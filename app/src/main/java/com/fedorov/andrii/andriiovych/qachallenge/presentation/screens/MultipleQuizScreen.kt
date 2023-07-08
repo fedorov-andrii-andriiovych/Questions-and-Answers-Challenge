@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MultipleViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
@@ -38,10 +39,10 @@ fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier)
             val questionModel = (screenState as ResultOf.Success<QuestionModel>).value
             MultipleSuccessScreen(
                 questionModel = questionModel,
-                onButton_0_Clicked = {multipleViewModel.checkCorrectAnswer(0)},
-                onButton_1_Clicked = {multipleViewModel.checkCorrectAnswer(1)},
-                onButton_2_Clicked = {multipleViewModel.checkCorrectAnswer(2)},
-                onButton_3_Clicked = {multipleViewModel.checkCorrectAnswer(3)},
+                onButton_0_Clicked = { multipleViewModel.checkCorrectAnswer(0) },
+                onButton_1_Clicked = { multipleViewModel.checkCorrectAnswer(1) },
+                onButton_2_Clicked = { multipleViewModel.checkCorrectAnswer(2) },
+                onButton_3_Clicked = { multipleViewModel.checkCorrectAnswer(3) },
                 button_0_ColorState = button0ColorState,
                 button_1_ColorState = button1ColorState,
                 button_2_ColorState = button2ColorState,
@@ -57,7 +58,6 @@ fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier)
             LoadingScreen()
         }
     }
-
 }
 
 @Composable
@@ -72,28 +72,12 @@ fun MultipleSuccessScreen(
     button_2_ColorState: Color,
     button_3_ColorState: Color
 ) {
+    TopText(text = questionModel.category)
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(25.dp))
-                .background(color = PrimaryBackgroundPink)
-                .fillMaxWidth()
-                .height(60.dp)
-                .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
-
-        ) {
-            Text(
-                text = questionModel.category,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.BooleanViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
@@ -61,28 +62,12 @@ fun BooleanSuccessScreen(
     buttonTrueColorState: Color,
     buttonFalseColorState: Color,
     ) {
+    TopText(text = questionModel.category)
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(25.dp))
-                .background(color = PrimaryBackgroundPink)
-                .fillMaxWidth()
-                .height(60.dp)
-                .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(25.dp))
-
-        ) {
-            Text(
-                text = questionModel.category,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()

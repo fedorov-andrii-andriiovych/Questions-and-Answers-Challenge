@@ -21,7 +21,7 @@ import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 @Composable
 fun FailureScreen(message: String, onClickRetry: () -> Unit) {
-    Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = message, textAlign = TextAlign.Center, color = Color.White,fontSize = 24.sp,)
         Button(
             modifier = Modifier.padding(top = 16.dp),

@@ -48,10 +48,6 @@ class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQ
             )
         _screenState.value = result
         if (result is ResultOf.Success<QuestionModel>) {
-            _button0ColorState.value = PrimaryBackgroundPink
-            _button1ColorState.value = PrimaryBackgroundPink
-            _button2ColorState.value = PrimaryBackgroundPink
-            _button3ColorState.value = PrimaryBackgroundPink
             questionState.value = result.value
         }
     }
@@ -93,8 +89,16 @@ class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQ
         }
     }
 
-    private fun updateQuestion() = viewModelScope.launch(Dispatchers.IO) {
+    private fun updateQuestion() = viewModelScope.launch(Dispatchers.Default) {
         delay(500)
+        resetButtonColor()
         getNewQuestion()
+    }
+
+    private fun resetButtonColor(){
+        _button0ColorState.value = PrimaryBackgroundPink
+        _button1ColorState.value = PrimaryBackgroundPink
+        _button2ColorState.value = PrimaryBackgroundPink
+        _button3ColorState.value = PrimaryBackgroundPink
     }
 }

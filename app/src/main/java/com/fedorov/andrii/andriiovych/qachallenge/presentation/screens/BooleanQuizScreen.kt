@@ -1,8 +1,6 @@
 package com.fedorov.andrii.andriiovych.qachallenge.presentation.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -13,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +22,6 @@ import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.BooleanViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
-import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 @Composable
 fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
@@ -38,7 +34,7 @@ fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
             BooleanSuccessScreen(
                 questionModel = questionModel,
                 onTrueClicked = { booleanViewModel.checkCorrectAnswer(true) },
-                onFalseClicked = { booleanViewModel.checkCorrectAnswer(false)},
+                onFalseClicked = { booleanViewModel.checkCorrectAnswer(false) },
                 buttonTrueColorState,
                 buttonFalseColorState
             )
@@ -61,7 +57,7 @@ fun BooleanSuccessScreen(
     onFalseClicked: () -> Unit,
     buttonTrueColorState: Color,
     buttonFalseColorState: Color,
-    ) {
+) {
     TopText(text = questionModel.category)
     Column(
         modifier = Modifier
@@ -81,43 +77,40 @@ fun BooleanSuccessScreen(
                 textAlign = TextAlign.Center
             )
         }
+        ButtonWithTextBoolean(
+            buttonText = stringResource(R.string.tru),
+            buttonColorState = buttonTrueColorState,
+            onButtonClicked = onTrueClicked
+        )
 
-        Button(
-            onClick = { onTrueClicked() },
-            colors = ButtonDefaults.buttonColors(backgroundColor = buttonTrueColorState),
-            shape = RoundedCornerShape(25.dp),
-            border = BorderStroke(
-                1.dp,
-                Color.Black
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.tru),
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-        Button(
-            onClick = { onFalseClicked() },
-            colors = ButtonDefaults.buttonColors(backgroundColor = buttonFalseColorState),
-            shape = RoundedCornerShape(25.dp),
-            border = BorderStroke(
-                1.dp,
-                Color.Black
-            ),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = stringResource(R.string.fals),
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
+        ButtonWithTextBoolean(
+            buttonText = stringResource(R.string.fals),
+            buttonColorState = buttonFalseColorState,
+            onButtonClicked = onFalseClicked
+        )
+    }
+}
 
+@Composable
+fun ButtonWithTextBoolean(
+    buttonText: String,
+    buttonColorState: Color,
+    onButtonClicked: () -> Unit
+) {
+    Button(
+        onClick = onButtonClicked,
+        colors = ButtonDefaults.buttonColors(backgroundColor = buttonColorState),
+        shape = RoundedCornerShape(25.dp),
+        border = BorderStroke(1.dp, Color.Black),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 24.dp)
+    ) {
+        Text(
+            text = buttonText,
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
     }
 }

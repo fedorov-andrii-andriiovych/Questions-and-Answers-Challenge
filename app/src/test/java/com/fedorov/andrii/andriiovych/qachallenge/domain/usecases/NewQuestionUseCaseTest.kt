@@ -5,10 +5,9 @@ import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.mockito.kotlin.mock
 
@@ -22,6 +21,11 @@ class NewQuestionUseCaseTest {
     }
 
     private val networkRepository = mock<NetworkRepository>()
+
+    @AfterEach
+    fun tearDown(){
+        Mockito.reset(networkRepository)
+    }
 
     @Test
      fun `should return the same data from repository`()  = runBlocking {

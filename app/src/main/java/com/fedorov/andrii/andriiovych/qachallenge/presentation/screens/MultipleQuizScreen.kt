@@ -1,20 +1,16 @@
 package com.fedorov.andrii.andriiovych.qachallenge.presentation.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -24,7 +20,6 @@ import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MultipleViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
-import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 @Composable
 fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier) {
@@ -91,83 +86,51 @@ fun MultipleSuccessScreen(
                 textAlign = TextAlign.Center
             )
         }
+        ButtonWithTextMultiple(
+            buttonText = questionModel.answers[0],
+            buttonColorState = button_0_ColorState,
+            onButtonClicked = onButton_0_Clicked
+        )
 
-        Button(
-            onClick = { onButton_0_Clicked() },
-            colors = ButtonDefaults.buttonColors(backgroundColor = button_0_ColorState),
-            shape = RoundedCornerShape(25.dp),
-            border = BorderStroke(
-                1.dp,
-                Color.Black
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            Text(
-                text = questionModel.answers[0],
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-        Button(
-            onClick = { onButton_1_Clicked() },
-            colors = ButtonDefaults.buttonColors(backgroundColor = button_1_ColorState),
-            shape = RoundedCornerShape(25.dp),
-            border = BorderStroke(
-                1.dp,
-                Color.Black
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            Text(
-                text = questionModel.answers[1],
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-        Button(
-            onClick = { onButton_2_Clicked() },
-            colors = ButtonDefaults.buttonColors(backgroundColor = button_2_ColorState),
-            shape = RoundedCornerShape(25.dp),
-            border = BorderStroke(
-                1.dp,
-                Color.Black
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            Text(
-                text = questionModel.answers[2],
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-        Button(
-            onClick = { onButton_3_Clicked() },
-            colors = ButtonDefaults.buttonColors(backgroundColor = button_3_ColorState),
-            shape = RoundedCornerShape(25.dp),
-            border = BorderStroke(
-                1.dp,
-                Color.Black
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            Text(
-                text = questionModel.answers[3],
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
+        ButtonWithTextMultiple(
+            buttonText = questionModel.answers[1],
+            buttonColorState = button_1_ColorState,
+            onButtonClicked = onButton_1_Clicked
+        )
 
+        ButtonWithTextMultiple(
+            buttonText = questionModel.answers[2],
+            buttonColorState = button_2_ColorState,
+            onButtonClicked = onButton_2_Clicked
+        )
+
+        ButtonWithTextMultiple(
+            buttonText = questionModel.answers[3],
+            buttonColorState = button_3_ColorState,
+            onButtonClicked = onButton_3_Clicked
+        )
+    }
+}
+@Composable
+fun ButtonWithTextMultiple(
+    buttonText: String,
+    buttonColorState: Color,
+    onButtonClicked: () -> Unit
+) {
+    Button(
+        onClick = onButtonClicked,
+        colors = ButtonDefaults.buttonColors(backgroundColor = buttonColorState),
+        shape = RoundedCornerShape(25.dp),
+        border = BorderStroke(1.dp, Color.Black),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp)
+    ) {
+        Text(
+            text = buttonText,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
     }
 }

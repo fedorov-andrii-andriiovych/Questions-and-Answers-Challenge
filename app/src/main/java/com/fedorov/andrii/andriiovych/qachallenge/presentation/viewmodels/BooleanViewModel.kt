@@ -43,8 +43,6 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
             )
         _screenState.value = result
         if (result is ResultOf.Success<QuestionModel>) {
-            _buttonTrueColorState.value = PrimaryBackgroundPink
-            _buttonFalseColorState.value = PrimaryBackgroundPink
             questionState.value = result.value
         }
     }
@@ -70,9 +68,15 @@ class BooleanViewModel @Inject constructor(private val newQuestionUseCase: NewQu
         }
     }
 
-    private fun updateQuestion() = viewModelScope.launch(Dispatchers.IO) {
+    private fun updateQuestion() = viewModelScope.launch(Dispatchers.Default) {
         delay(500)
+        resetButtonColor()
         getNewQuestion()
+    }
+
+    private fun resetButtonColor() {
+        _buttonTrueColorState.value = PrimaryBackgroundPink
+        _buttonFalseColorState.value = PrimaryBackgroundPink
     }
 
     companion object {

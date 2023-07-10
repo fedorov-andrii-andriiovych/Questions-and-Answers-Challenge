@@ -4,8 +4,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CheckAnswerParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
+import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.CheckAnswerUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
@@ -19,7 +21,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQuestionUseCase) :
+class MultipleViewModel @Inject constructor(
+    private val newQuestionUseCase: NewQuestionUseCase,
+    private val checkAnswerUseCase: CheckAnswerUseCase
+) :
     ViewModel() {
     private val _screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
     val screenState: StateFlow<ResultOf<QuestionModel>> = _screenState
@@ -53,11 +58,15 @@ class MultipleViewModel @Inject constructor(private val newQuestionUseCase: NewQ
     }
 
     fun checkCorrectAnswer(numberButton: Int) {
-        val answers = questionState.value.answers
-        val correctAnswer = questionState.value.correct_answer
+        val result = checkAnswerUseCase.checkAnswers(
+            CheckAnswerParams(
+                answers = questionState.value.answers,
+                correctAnswer = questionState.value.correct_answer,
+                numberButton = numberButton
+            )
+        )
         val colorState = getColorStateForButton(numberButton)
-
-        if (answers[numberButton] == correctAnswer) {
+        if (result) {
             correctAnswer(colorState)
         } else {
             wrongAnswer(colorState)

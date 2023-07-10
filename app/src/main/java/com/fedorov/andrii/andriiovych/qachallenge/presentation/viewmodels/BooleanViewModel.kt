@@ -9,21 +9,22 @@ import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.CheckAnswerUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.di.IoDispatcher
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.di.NetworkModule
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BooleanViewModel @Inject constructor(
     private val newQuestionUseCase: NewQuestionUseCase,
-    private val checkAnswerUseCase: CheckAnswerUseCase
+    private val checkAnswerUseCase: CheckAnswerUseCase,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) :
     ViewModel() {
     private val _screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
@@ -32,11 +33,11 @@ class BooleanViewModel @Inject constructor(
     val buttonTrueColorState: StateFlow<Color> = _buttonTrueColorState
     private val _buttonFalseColorState = MutableStateFlow(PrimaryBackgroundPink)
     val buttonFalseColorState: StateFlow<Color> = _buttonFalseColorState
-    private val questionState = MutableStateFlow(QuestionModel())
+     val questionState = MutableStateFlow(QuestionModel())
 
     var difficultyState = QuestionDifficulty.ANY
     var categoryState = CategoryModel()
-    fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
+    fun getNewQuestion() = viewModelScope.launch(dispatcher) {
         _screenState.value = ResultOf.Loading
         val result =
             newQuestionUseCase.getNewQuestion(
@@ -85,7 +86,7 @@ class BooleanViewModel @Inject constructor(
         colorState.value = ButtonBackgroundFalse
     }
 
-    private fun updateQuestion() = viewModelScope.launch(Dispatchers.Default) {
+    private fun updateQuestion() = viewModelScope.launch {
         delay(500)
         resetButtonColor()
         getNewQuestion()

@@ -9,10 +9,12 @@ import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.CheckAnswerUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.di.IoDispatcher
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MultipleViewModel @Inject constructor(
     private val newQuestionUseCase: NewQuestionUseCase,
-    private val checkAnswerUseCase: CheckAnswerUseCase
+    private val checkAnswerUseCase: CheckAnswerUseCase,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) :
     ViewModel() {
     private val _screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
@@ -41,7 +44,7 @@ class MultipleViewModel @Inject constructor(
     var categoryState = CategoryModel()
     var difficultyState = QuestionDifficulty.ANY
 
-    fun getNewQuestion() = viewModelScope.launch(Dispatchers.IO) {
+    fun getNewQuestion() = viewModelScope.launch(dispatcher) {
         _screenState.value = ResultOf.Loading
         val result =
             newQuestionUseCase.getNewQuestion(
@@ -92,7 +95,7 @@ class MultipleViewModel @Inject constructor(
         colorState.value = ButtonBackgroundFalse
     }
 
-    private fun updateQuestion() = viewModelScope.launch(Dispatchers.Default) {
+    private fun updateQuestion() = viewModelScope.launch {
         delay(500)
         resetButtonColor()
         getNewQuestion()

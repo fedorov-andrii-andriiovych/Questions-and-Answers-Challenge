@@ -10,8 +10,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 
@@ -43,3 +46,35 @@ object NetworkModule {
         return UserToken
     }
 }
+
+@Module
+@InstallIn(SingletonComponent::class)
+object DispatcherModule {
+
+    @DefaultDispatcher
+    @Provides
+    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @IoDispatcher
+    @Provides
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @MainDispatcher
+    @Provides
+    fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+
+    @Provides
+    fun providesCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.Unconfined
+}
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class IoDispatcher
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class MainDispatcher
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class DefaultDispatcher

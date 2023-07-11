@@ -11,13 +11,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class ResultOfScreen<out T> {
-    data class Success<out R>(val value: R) : ResultOfScreen<R>()
+sealed class ScreenState<out T> {
+    data class Success<out R>(val value: R) : ScreenState<R>()
     data class Failure(
         val message: String,
-    ) : ResultOfScreen<Nothing>()
+    ) : ScreenState<Nothing>()
 
-    object Loading : ResultOfScreen<Nothing>()
+    object Loading : ScreenState<Nothing>()
 }
 
 enum class QuestionType(val value: String) {
@@ -70,7 +70,7 @@ class MainViewModel @Inject constructor(private val newTokenUseCase: NewTokenUse
     )
     val typeState = mutableStateOf(QuestionType.ANY)
 
-    private fun getNewToken() = viewModelScope.launch(Dispatchers.IO) {
+     fun getNewToken() = viewModelScope.launch {
         while (tryGetTokenCount < 10) {
             val result = newTokenUseCase.getNewToken()
             if (result) break

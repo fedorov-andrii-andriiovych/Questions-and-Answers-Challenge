@@ -3,7 +3,8 @@ package com.fedorov.andrii.andriiovych.qachallenge.domain.usecases
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
-import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOfScreen
+import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.ResultOfResponse
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ScreenState
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -30,7 +31,7 @@ class NewQuestionUseCaseTest {
     @Test
      fun `should return the same data from repository`()  = runBlocking {
 
-        val testData = ResultOfScreen.Success(
+        val testData = ResultOfResponse.Success(
             value = QuestionModel(
                 category = ONE,
                 difficulty = HARD,
@@ -41,7 +42,7 @@ class NewQuestionUseCaseTest {
 
         val useCase = NewQuestionUseCase(networkRepository = networkRepository)
 
-        val result = useCase.getNewQuestion(QuestionParams()) as ResultOfScreen.Success
+        val result = useCase.getNewQuestion(QuestionParams()) as ResultOfResponse.Success
         val actual = result.value
         val expected = QuestionModel(category = ONE, difficulty = HARD, type = BOOLEAN)
 
@@ -51,12 +52,12 @@ class NewQuestionUseCaseTest {
     @Test
     fun `should return error from repository`()  = runBlocking {
 
-        val testData = ResultOfScreen.Failure(message = ERROR)
+        val testData = ResultOfResponse.Failure(message = ERROR)
         Mockito.`when`(networkRepository.getNewQuestion(QuestionParams())).thenReturn(testData)
 
         val useCase = NewQuestionUseCase(networkRepository = networkRepository)
 
-        val result = useCase.getNewQuestion(QuestionParams()) as ResultOfScreen.Failure
+        val result = useCase.getNewQuestion(QuestionParams()) as ResultOfResponse.Failure
         val actual = result.message
         val expected = ERROR
 

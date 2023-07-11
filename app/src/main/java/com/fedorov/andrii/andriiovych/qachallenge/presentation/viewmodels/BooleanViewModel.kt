@@ -26,8 +26,8 @@ class BooleanViewModel @Inject constructor(
 ) :
     ViewModel() {
     private val _screenState =
-        MutableStateFlow<ResultOfScreen<QuestionModel>>(ResultOfScreen.Loading)
-    val screenState: StateFlow<ResultOfScreen<QuestionModel>> = _screenState
+        MutableStateFlow<ScreenState<QuestionModel>>(ScreenState.Loading)
+    val screenState: StateFlow<ScreenState<QuestionModel>> = _screenState
     private val _buttonTrueColorState = MutableStateFlow(PrimaryBackgroundPink)
     val buttonTrueColorState: StateFlow<Color> = _buttonTrueColorState
     private val _buttonFalseColorState = MutableStateFlow(PrimaryBackgroundPink)
@@ -36,7 +36,7 @@ class BooleanViewModel @Inject constructor(
 
     var categoryState = CategoryModel()
     fun getNewQuestion() = viewModelScope.launch {
-        _screenState.value = ResultOfScreen.Loading
+        _screenState.value = ScreenState.Loading
         val result =
             newQuestionUseCase.getNewQuestion(
                 QuestionParams(
@@ -47,14 +47,14 @@ class BooleanViewModel @Inject constructor(
             )
         when (result) {
             is ResultOfResponse.Success<QuestionModel> -> _screenState.value =
-                ResultOfScreen.Success(value = result.value)
+                ScreenState.Success(value = result.value)
             is ResultOfResponse.Failure -> _screenState.value =
-                ResultOfScreen.Failure(message = result.message)
+                ScreenState.Failure(message = result.message)
         }
     }
 
     fun checkCorrectAnswer(numberButton: Int) {
-        val questionModel = (screenState.value as ResultOfScreen.Success).value
+        val questionModel = (screenState.value as ScreenState.Success).value
         val result = checkAnswerUseCase.checkAnswers(
             CheckAnswerParams(
                 answers = questionModel.answers,

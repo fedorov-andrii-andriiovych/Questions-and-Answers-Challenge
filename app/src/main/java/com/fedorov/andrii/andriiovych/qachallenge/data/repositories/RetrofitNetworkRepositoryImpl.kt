@@ -27,8 +27,8 @@ class RetrofitNetworkRepositoryImpl @Inject constructor(
 ) :
     NetworkRepository {
 
-    override suspend fun getNewToken(): Boolean {
-        return try {
+    override suspend fun getNewToken(): Boolean = withContext(dispatcher){
+        return@withContext try {
             userToken.token = questionServices.getNewToken().token
             true
         } catch (e: Exception) {

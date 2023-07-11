@@ -2,6 +2,7 @@ package com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels
 
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CheckAnswerParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.ResultOfResponse
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.CheckAnswerUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
@@ -45,11 +46,11 @@ class BooleanViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `should screen_state = success`() = runTest {
-        val testData = ResultOfScreen.Success(value = QuestionModel(question = "test"))
+        val testData = ResultOfResponse.Success(value = QuestionModel(question = "test"))
         Mockito.`when`(newQuestionUseCase.getNewQuestion(any())).thenReturn(testData)
 
         booleanViewModel.getNewQuestion()
-        val actual = ResultOfScreen.Success(value = QuestionModel(question = "test"))
+        val actual = ScreenState.Success(value = QuestionModel(question = "test"))
         val expected = booleanViewModel.screenState.value
 
         Assertions.assertEquals(expected, actual)
@@ -58,11 +59,11 @@ class BooleanViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `should screen_state = failure`() = runTest {
-        val testData = ResultOfScreen.Failure("test")
+        val testData = ResultOfResponse.Failure("test")
         Mockito.`when`(newQuestionUseCase.getNewQuestion(any())).thenReturn(testData)
 
         booleanViewModel.getNewQuestion()
-        val actual = ResultOfScreen.Failure("test")
+        val actual = ScreenState.Failure("test")
         val expected = booleanViewModel.screenState.value
 
         Assertions.assertEquals(expected, actual)
@@ -71,7 +72,7 @@ class BooleanViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `should check the answer and return the true and changed color buttonTrue = colorTrue`()  = runTest{
-        val testResult = ResultOfScreen.Success(value = QuestionModel(question = "test", correct_answer = "1", answers = listOf("1")))
+        val testResult = ResultOfResponse.Success(value = QuestionModel(question = "test", correct_answer = "1", answers = listOf("1")))
         Mockito.`when`(newQuestionUseCase.getNewQuestion(any())).thenReturn(testResult)
         booleanViewModel.getNewQuestion()
 
@@ -93,7 +94,7 @@ class BooleanViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `should check the answer and return the false and changed color buttonTrue = colorFalse`()  = runTest{
-        val testResult = ResultOfScreen.Success(value = QuestionModel(question = "test", correct_answer = "1", answers = listOf("1")))
+        val testResult = ResultOfResponse.Success(value = QuestionModel(question = "test", correct_answer = "1", answers = listOf("1")))
         Mockito.`when`(newQuestionUseCase.getNewQuestion(any())).thenReturn(testResult)
         booleanViewModel.getNewQuestion()
 

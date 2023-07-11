@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MultipleViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOfScreen
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ScreenState
 
 @Composable
 fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier) {
@@ -30,8 +30,8 @@ fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier)
     val button3ColorState by multipleViewModel.button3ColorState.collectAsState()
 
     when (screenState) {
-        is ResultOfScreen.Success -> {
-            val questionModel = (screenState as ResultOfScreen.Success<QuestionModel>).value
+        is ScreenState.Success -> {
+            val questionModel = (screenState as ScreenState.Success<QuestionModel>).value
             MultipleSuccessScreen(
                 questionModel = questionModel,
                 onButton_0_Clicked = { multipleViewModel.checkCorrectAnswer(MultipleViewModel.BUTTON_0) },
@@ -44,12 +44,12 @@ fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier)
                 button_3_ColorState = button3ColorState
             )
         }
-        is ResultOfScreen.Failure -> {
+        is ScreenState.Failure -> {
             FailureScreen(
-                message = (screenState as ResultOfScreen.Failure).message,
+                message = (screenState as ScreenState.Failure).message,
                 onClickRetry = { multipleViewModel.getNewQuestion() })
         }
-        is ResultOfScreen.Loading -> {
+        is ScreenState.Loading -> {
             LoadingScreen()
         }
     }

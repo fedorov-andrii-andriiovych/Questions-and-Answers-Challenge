@@ -2,7 +2,6 @@ package com.fedorov.andrii.andriiovych.qachallenge.domain.repositories
 
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
-import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOfScreen
 
 sealed class ResultOfResponse<out T> {
     data class Success<out R>(val value: R) : ResultOfResponse<R>()

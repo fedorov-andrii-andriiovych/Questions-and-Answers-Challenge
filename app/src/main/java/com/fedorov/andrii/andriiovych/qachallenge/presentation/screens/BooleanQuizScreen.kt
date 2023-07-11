@@ -21,7 +21,7 @@ import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.BooleanViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOfScreen
 
 @Composable
 fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
@@ -29,8 +29,8 @@ fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
     val buttonTrueColorState by booleanViewModel.buttonTrueColorState.collectAsState()
     val buttonFalseColorState by booleanViewModel.buttonFalseColorState.collectAsState()
     when (screenState) {
-        is ResultOf.Success<QuestionModel> -> {
-            val questionModel = (screenState as ResultOf.Success<QuestionModel>).value
+        is ResultOfScreen.Success<QuestionModel> -> {
+            val questionModel = (screenState as ResultOfScreen.Success<QuestionModel>).value
             BooleanSuccessScreen(
                 questionModel = questionModel,
                 onTrueClicked = { booleanViewModel.checkCorrectAnswer(BooleanViewModel.TRUE) },
@@ -39,12 +39,12 @@ fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
                 buttonFalseColorState
             )
         }
-        is ResultOf.Failure -> {
+        is ResultOfScreen.Failure -> {
             FailureScreen(
-                message = (screenState as ResultOf.Failure).message,
+                message = (screenState as ResultOfScreen.Failure).message,
                 onClickRetry = { booleanViewModel.getNewQuestion() })
         }
-        is ResultOf.Loading -> {
+        is ResultOfScreen.Loading -> {
             LoadingScreen()
         }
     }

@@ -8,8 +8,8 @@ import com.fedorov.andrii.andriiovych.qachallenge.data.network.models.QuestionRe
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
+import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.ResultOfResponse
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.di.IoDispatcher
-import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -38,7 +38,7 @@ class RetrofitNetworkRepositoryImpl @Inject constructor(
 
     override suspend fun getNewQuestion(
         questionParams: QuestionParams
-    ): ResultOf<QuestionModel> = withContext(dispatcher) {
+    ): ResultOfResponse<QuestionModel> = withContext(dispatcher) {
         return@withContext try {
             val result = parseResponse(
                 questionServices.getNewQuestion(
@@ -48,13 +48,13 @@ class RetrofitNetworkRepositoryImpl @Inject constructor(
                     token = userToken.token
                 )
             )
-            ResultOf.Success(result)
+            ResultOfResponse.Success(result)
         } catch (e: UnknownHostException) {
-            ResultOf.Failure(e.message ?: SOMETHING_WENT_WRONG)
+            ResultOfResponse.Failure(e.message ?: SOMETHING_WENT_WRONG)
         } catch (e: ConnectException) {
-            ResultOf.Failure(e.message ?: SOMETHING_WENT_WRONG)
+            ResultOfResponse.Failure(e.message ?: SOMETHING_WENT_WRONG)
         } catch (e: Exception) {
-            ResultOf.Failure(e.message ?: SOMETHING_WENT_WRONG)
+            ResultOfResponse.Failure(e.message ?: SOMETHING_WENT_WRONG)
         }
     }
 

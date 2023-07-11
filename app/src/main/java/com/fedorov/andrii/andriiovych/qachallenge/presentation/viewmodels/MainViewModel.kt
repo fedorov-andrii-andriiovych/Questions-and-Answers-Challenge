@@ -11,13 +11,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class ResultOf<out T> {
-    data class Success<out R>(val value: R) : ResultOf<R>()
+sealed class ResultOfScreen<out T> {
+    data class Success<out R>(val value: R) : ResultOfScreen<R>()
     data class Failure(
         val message: String,
-    ) : ResultOf<Nothing>()
+    ) : ResultOfScreen<Nothing>()
 
-    object Loading : ResultOf<Nothing>()
+    object Loading : ResultOfScreen<Nothing>()
 }
 
 enum class QuestionType(val value: String) {

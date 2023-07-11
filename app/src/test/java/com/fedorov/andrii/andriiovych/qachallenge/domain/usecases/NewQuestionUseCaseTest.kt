@@ -3,7 +3,7 @@ package com.fedorov.andrii.andriiovych.qachallenge.domain.usecases
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
-import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOfScreen
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -30,7 +30,7 @@ class NewQuestionUseCaseTest {
     @Test
      fun `should return the same data from repository`()  = runBlocking {
 
-        val testData = ResultOf.Success(
+        val testData = ResultOfScreen.Success(
             value = QuestionModel(
                 category = ONE,
                 difficulty = HARD,
@@ -41,7 +41,7 @@ class NewQuestionUseCaseTest {
 
         val useCase = NewQuestionUseCase(networkRepository = networkRepository)
 
-        val result = useCase.getNewQuestion(QuestionParams()) as ResultOf.Success
+        val result = useCase.getNewQuestion(QuestionParams()) as ResultOfScreen.Success
         val actual = result.value
         val expected = QuestionModel(category = ONE, difficulty = HARD, type = BOOLEAN)
 
@@ -51,12 +51,12 @@ class NewQuestionUseCaseTest {
     @Test
     fun `should return error from repository`()  = runBlocking {
 
-        val testData = ResultOf.Failure(message = ERROR)
+        val testData = ResultOfScreen.Failure(message = ERROR)
         Mockito.`when`(networkRepository.getNewQuestion(QuestionParams())).thenReturn(testData)
 
         val useCase = NewQuestionUseCase(networkRepository = networkRepository)
 
-        val result = useCase.getNewQuestion(QuestionParams()) as ResultOf.Failure
+        val result = useCase.getNewQuestion(QuestionParams()) as ResultOfScreen.Failure
         val actual = result.message
         val expected = ERROR
 

@@ -7,15 +7,13 @@ import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CheckAnswerParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
+import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.ResultOfResponse
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.CheckAnswerUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
-import com.fedorov.andrii.andriiovych.qachallenge.presentation.di.IoDispatcher
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,8 +26,9 @@ class MultipleViewModel @Inject constructor(
     private val checkAnswerUseCase: CheckAnswerUseCase,
 ) :
     ViewModel() {
-    private val _screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
-    val screenState: StateFlow<ResultOf<QuestionModel>> = _screenState
+    private val _screenState =
+        MutableStateFlow<ResultOfScreen<QuestionModel>>(ResultOfScreen.Loading)
+    val screenState: StateFlow<ResultOfScreen<QuestionModel>> = _screenState
     private val _button0ColorState = MutableStateFlow(PrimaryBackgroundPink)
     val button0ColorState: StateFlow<Color> = _button0ColorState
     private val _button1ColorState = MutableStateFlow(PrimaryBackgroundPink)
@@ -43,8 +42,8 @@ class MultipleViewModel @Inject constructor(
 
 
     fun getNewQuestion() = viewModelScope.launch {
-        _screenState.value = ResultOf.Loading
-        _screenState.value =
+        _screenState.value = ResultOfScreen.Loading
+        val result =
             newQuestionUseCase.getNewQuestion(
                 QuestionParams(
                     category = categoryState.id,
@@ -52,10 +51,16 @@ class MultipleViewModel @Inject constructor(
                     difficulty = difficultyState.value
                 )
             )
+        when (result) {
+            is ResultOfResponse.Success<QuestionModel> -> _screenState.value =
+                ResultOfScreen.Success(value = result.value)
+            is ResultOfResponse.Failure -> _screenState.value =
+                ResultOfScreen.Failure(message = result.message)
+        }
     }
 
     fun checkCorrectAnswer(numberButton: Int) {
-        val questionModel = (screenState.value as ResultOf.Success).value
+        val questionModel = (screenState.value as ResultOfScreen.Success).value
         val result = checkAnswerUseCase.checkAnswers(
             CheckAnswerParams(
                 answers = questionModel.answers,

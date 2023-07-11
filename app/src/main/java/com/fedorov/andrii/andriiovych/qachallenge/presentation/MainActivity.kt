@@ -44,13 +44,11 @@ class MainActivity : ComponentActivity() {
                             CategoryScreen(Modifier, viewModel, onClickCategory = {categoryModel->
                                 when (viewModel.typeState.value) {
                                     QuestionType.BOOLEAN -> {
-                                        booleanViewModel.difficultyState = QuestionDifficulty.ANY
                                         booleanViewModel.categoryState = categoryModel
                                         booleanViewModel.getNewQuestion()
                                         navController.navigate(BOOLEAN_QUIZ_SCREEN)
                                     }
                                     QuestionType.MULTIPLE -> {
-                                        multipleViewModel.difficultyState = QuestionDifficulty.ANY
                                         multipleViewModel.categoryState = categoryModel
                                         multipleViewModel.getNewQuestion()
                                         navController.navigate(MULTIPLE_QUIZ_SCREEN)

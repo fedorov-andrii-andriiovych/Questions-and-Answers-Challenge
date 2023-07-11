@@ -24,7 +24,6 @@ import javax.inject.Inject
 class BooleanViewModel @Inject constructor(
     private val newQuestionUseCase: NewQuestionUseCase,
     private val checkAnswerUseCase: CheckAnswerUseCase,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) :
     ViewModel() {
     private val _screenState = MutableStateFlow<ResultOf<QuestionModel>>(ResultOf.Loading)
@@ -33,13 +32,12 @@ class BooleanViewModel @Inject constructor(
     val buttonTrueColorState: StateFlow<Color> = _buttonTrueColorState
     private val _buttonFalseColorState = MutableStateFlow(PrimaryBackgroundPink)
     val buttonFalseColorState: StateFlow<Color> = _buttonFalseColorState
-     val questionState = MutableStateFlow(QuestionModel())
+    private var difficultyState = QuestionDifficulty.ANY
 
-    var difficultyState = QuestionDifficulty.ANY
     var categoryState = CategoryModel()
-    fun getNewQuestion() = viewModelScope.launch(dispatcher) {
+    fun getNewQuestion() = viewModelScope.launch {
         _screenState.value = ResultOf.Loading
-        val result =
+        _screenState.value =
             newQuestionUseCase.getNewQuestion(
                 QuestionParams(
                     category = categoryState.id,
@@ -47,17 +45,14 @@ class BooleanViewModel @Inject constructor(
                     difficulty = difficultyState.value
                 )
             )
-        _screenState.value = result
-        if (result is ResultOf.Success<QuestionModel>) {
-            questionState.value = result.value
-        }
     }
 
     fun checkCorrectAnswer(numberButton: Int) {
+        val questionModel = (screenState.value as ResultOf.Success).value
         val result = checkAnswerUseCase.checkAnswers(
             CheckAnswerParams(
-                answers = questionState.value.answers,
-                correctAnswer = questionState.value.correct_answer,
+                answers = questionModel.answers,
+                correctAnswer = questionModel.correct_answer,
                 numberButton = numberButton
             )
         )

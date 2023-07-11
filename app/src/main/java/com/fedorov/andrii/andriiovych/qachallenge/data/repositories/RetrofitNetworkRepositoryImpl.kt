@@ -8,8 +8,11 @@ import com.fedorov.andrii.andriiovych.qachallenge.data.network.models.QuestionRe
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.di.IoDispatcher
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ResultOf
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import java.net.ConnectException
 import java.net.UnknownHostException
@@ -19,7 +22,8 @@ private const val SOMETHING_WENT_WRONG = "Something went wrong, please reload th
 
 class RetrofitNetworkRepositoryImpl @Inject constructor(
     private val questionServices: QuestionServices,
-    private val userToken: UserToken
+    private val userToken: UserToken,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) :
     NetworkRepository {
 
@@ -34,8 +38,8 @@ class RetrofitNetworkRepositoryImpl @Inject constructor(
 
     override suspend fun getNewQuestion(
         questionParams: QuestionParams
-    ): ResultOf<QuestionModel> {
-        return try {
+    ): ResultOf<QuestionModel> = withContext(dispatcher) {
+        return@withContext try {
             val result = parseResponse(
                 questionServices.getNewQuestion(
                     category = questionParams.category,

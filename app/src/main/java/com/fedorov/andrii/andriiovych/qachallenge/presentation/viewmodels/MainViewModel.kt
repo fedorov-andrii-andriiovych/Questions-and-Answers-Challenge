@@ -37,6 +37,7 @@ enum class QuestionDifficulty(val value: String) {
 class MainViewModel @Inject constructor(private val newTokenUseCase: NewTokenUseCase) :
     ViewModel() {
     private var tryGetTokenCount = 0
+
     init {
         getNewToken()
     }

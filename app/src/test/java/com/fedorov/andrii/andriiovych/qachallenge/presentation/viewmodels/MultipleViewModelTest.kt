@@ -7,8 +7,12 @@ import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
-import kotlinx.coroutines.*
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -17,11 +21,10 @@ import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 
-class BooleanViewModelTest {
-
+class MultipleViewModelTest {
     private val newQuestionUseCase = mock<NewQuestionUseCase>()
     private val checkAnswerUseCase = mock<CheckAnswerUseCase>()
-    private lateinit var booleanViewModel: BooleanViewModel
+    private lateinit var multipleViewModel: MultipleViewModel
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @AfterEach
@@ -35,7 +38,7 @@ class BooleanViewModelTest {
     @BeforeEach
     fun beforeEach() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        booleanViewModel = BooleanViewModel(
+        multipleViewModel = MultipleViewModel(
             newQuestionUseCase = newQuestionUseCase,
             checkAnswerUseCase = checkAnswerUseCase
         )
@@ -48,9 +51,9 @@ class BooleanViewModelTest {
         val testData = ResultOf.Success(value = QuestionModel(question = "test"))
         Mockito.`when`(newQuestionUseCase.getNewQuestion(any())).thenReturn(testData)
 
-        booleanViewModel.getNewQuestion()
+        multipleViewModel.getNewQuestion()
         val actual = ResultOf.Success(value = QuestionModel(question = "test"))
-        val expected = booleanViewModel.screenState.value
+        val expected = multipleViewModel.screenState.value
 
         Assertions.assertEquals(expected, actual)
     }
@@ -61,21 +64,21 @@ class BooleanViewModelTest {
         val testData = ResultOf.Failure("test")
         Mockito.`when`(newQuestionUseCase.getNewQuestion(any())).thenReturn(testData)
 
-        booleanViewModel.getNewQuestion()
+        multipleViewModel.getNewQuestion()
         val actual = ResultOf.Failure("test")
-        val expected = booleanViewModel.screenState.value
+        val expected = multipleViewModel.screenState.value
 
         Assertions.assertEquals(expected, actual)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `should check the answer and return the true and changed color buttonTrue = colorTrue`()  = runTest{
+    fun `should check the answer and return the true and changed color button2 = colorTrue`()  = runTest{
         val testResult = ResultOf.Success(value = QuestionModel(question = "test", correct_answer = "1", answers = listOf("1")))
         Mockito.`when`(newQuestionUseCase.getNewQuestion(any())).thenReturn(testResult)
-        booleanViewModel.getNewQuestion()
+        multipleViewModel.getNewQuestion()
 
-        val testNumber = 0
+        val testNumber = 2
         val testParams = CheckAnswerParams(
             numberButton = testNumber,
             correctAnswer = "1",
@@ -83,21 +86,23 @@ class BooleanViewModelTest {
         )
         val testData = true
         Mockito.`when`(checkAnswerUseCase.checkAnswers(testParams)).thenReturn(testData)
-        booleanViewModel.checkCorrectAnswer(testNumber)
+        multipleViewModel.checkCorrectAnswer(testNumber)
 
         Mockito.verify(checkAnswerUseCase, Mockito.times(1)).checkAnswers(testParams)
-        Assertions.assertEquals(booleanViewModel.buttonTrueColorState.value, ButtonBackgroundTrue)
-        Assertions.assertEquals(booleanViewModel.buttonFalseColorState.value, PrimaryBackgroundPink)
+        Assertions.assertEquals(multipleViewModel.button2ColorState.value, ButtonBackgroundTrue)
+        Assertions.assertEquals(multipleViewModel.button3ColorState.value, PrimaryBackgroundPink)
+        Assertions.assertEquals(multipleViewModel.button1ColorState.value, PrimaryBackgroundPink)
+        Assertions.assertEquals(multipleViewModel.button0ColorState.value, PrimaryBackgroundPink)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `should check the answer and return the false and changed color buttonTrue = colorFalse`()  = runTest{
+    fun `should check the answer and return the false and changed color button2 = colorFalse`()  = runTest{
         val testResult = ResultOf.Success(value = QuestionModel(question = "test", correct_answer = "1", answers = listOf("1")))
         Mockito.`when`(newQuestionUseCase.getNewQuestion(any())).thenReturn(testResult)
-        booleanViewModel.getNewQuestion()
+        multipleViewModel.getNewQuestion()
 
-        val testNumber = 0
+        val testNumber = 2
         val testParams = CheckAnswerParams(
             numberButton = testNumber,
             correctAnswer = "1",
@@ -105,10 +110,12 @@ class BooleanViewModelTest {
         )
         val testData = false
         Mockito.`when`(checkAnswerUseCase.checkAnswers(testParams)).thenReturn(testData)
-        booleanViewModel.checkCorrectAnswer(testNumber)
+        multipleViewModel.checkCorrectAnswer(testNumber)
 
         Mockito.verify(checkAnswerUseCase, Mockito.times(1)).checkAnswers(testParams)
-        Assertions.assertEquals(booleanViewModel.buttonTrueColorState.value, ButtonBackgroundFalse)
-        Assertions.assertEquals(booleanViewModel.buttonFalseColorState.value, PrimaryBackgroundPink)
+        Assertions.assertEquals(multipleViewModel.button2ColorState.value, ButtonBackgroundFalse)
+        Assertions.assertEquals(multipleViewModel.button3ColorState.value, PrimaryBackgroundPink)
+        Assertions.assertEquals(multipleViewModel.button1ColorState.value, PrimaryBackgroundPink)
+        Assertions.assertEquals(multipleViewModel.button0ColorState.value, PrimaryBackgroundPink)
     }
 }

@@ -1,4 +1,4 @@
-﻿# Questions-and-Answers-Challenge-Compose
+﻿# Questions-and-Answers-Challenge
  
  Introducing Q&A Challenge! It's a quiz app where you can test your knowledge in various categories. Choose from a wide range of question categories and answer them in two different ways: either with a simple "Yes" or "No" 
  or by selecting from multiple options. Q&A Challenge offers a fun and engaging way to challenge yourself and learn new things. Start playing now and see how well you do!

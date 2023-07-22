@@ -1,7 +1,6 @@
 package com.fedorov.andrii.andriiovych.qachallenge.data.repositories
 
-import android.text.Html
-import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.QuestionResponseMapper
+import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.QuestionResponseToQuestionModelMapper
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.NetworkException
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.UserToken
@@ -24,7 +23,7 @@ private const val SOMETHING_WENT_WRONG = "Something went wrong, please reload th
 class RetrofitNetworkRepositoryImpl @Inject constructor(
     private val questionServices: QuestionServices,
     private val userToken: UserToken,
-    private val questionResponseMapper: QuestionResponseMapper,
+    private val questionResponseToQuestionModelMapper: QuestionResponseToQuestionModelMapper,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) :
     NetworkRepository {
@@ -75,7 +74,7 @@ class RetrofitNetworkRepositoryImpl @Inject constructor(
     }
 
     private fun mapData(response: QuestionResponse): QuestionModel {
-        return questionResponseMapper.mapData(response = response)
+        return questionResponseToQuestionModelMapper.mapFrom(from = response)
     }
 
     private fun getNetworkException(response: Response<QuestionResponse>): NetworkException {

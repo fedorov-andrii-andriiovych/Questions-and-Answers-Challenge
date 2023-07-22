@@ -6,10 +6,10 @@ import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import javax.inject.Inject
 
 
-class QuestionResponseMapper @Inject constructor(){
+class QuestionResponseToQuestionModelMapper @Inject constructor():Mapper<QuestionResponse,QuestionModel>{
 
-     fun mapData(response: QuestionResponse): QuestionModel {
-        val questionResponse = response.results[0]
+    override fun mapFrom(from: QuestionResponse): QuestionModel {
+        val questionResponse = from.results[0]
         val incorrectAnswers = questionResponse.incorrectAnswers.map { decodeHtmlString(it) }
         val correctAnswer = decodeHtmlString(questionResponse.correctAnswer)
         val answers = mutableListOf<String>().apply {
@@ -27,7 +27,6 @@ class QuestionResponseMapper @Inject constructor(){
             answers = answers
         )
     }
-
     private fun decodeHtmlString(htmlString: String): String {
         return Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY).toString()
     }

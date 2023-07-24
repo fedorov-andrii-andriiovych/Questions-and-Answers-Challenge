@@ -37,8 +37,8 @@ fun TopText(text: String) {
             .border(
                 BorderStroke(dimensionResource(id = R.dimen.spaceXXXSmall), Color.Black),
                 shape = RoundedCornerShape(
-                    dimensionResource(id = R.dimen.shapeLarge),
-                    dimensionResource(id = R.dimen.shapeLarge)
+                    bottomStart = dimensionResource(id = R.dimen.shapeLarge),
+                    bottomEnd = dimensionResource(id = R.dimen.shapeLarge)
                 )
             )
 

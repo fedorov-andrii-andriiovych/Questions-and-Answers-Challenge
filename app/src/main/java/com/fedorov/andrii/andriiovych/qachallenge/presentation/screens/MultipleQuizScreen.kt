@@ -12,10 +12,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MultipleViewModel
@@ -71,7 +73,8 @@ fun MultipleSuccessScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
+            .padding(dimensionResource(id = R.dimen.spaceXXMedium)),
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Box(
             modifier = Modifier
@@ -111,6 +114,7 @@ fun MultipleSuccessScreen(
         )
     }
 }
+
 @Composable
 fun ButtonWithTextMultiple(
     buttonText: String,
@@ -120,11 +124,11 @@ fun ButtonWithTextMultiple(
     Button(
         onClick = onButtonClicked,
         colors = ButtonDefaults.buttonColors(backgroundColor = buttonColorState),
-        shape = RoundedCornerShape(25.dp),
-        border = BorderStroke(1.dp, Color.Black),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.shapeMedium)),
+        border = BorderStroke(dimensionResource(id = R.dimen.spaceXXXSmall), Color.Black),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 16.dp)
+            .padding(bottom = dimensionResource(id = R.dimen.spaceMedium))
     ) {
         Text(
             text = buttonText,

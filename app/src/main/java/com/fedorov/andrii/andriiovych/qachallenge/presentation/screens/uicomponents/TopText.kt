@@ -13,21 +13,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 
 @Composable
-fun TopText(text:String) {
+fun TopText(text: String) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .clip(shape = RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp))
+            .clip(
+                shape = RoundedCornerShape(
+                    bottomStart = dimensionResource(id = R.dimen.shapeLarge),
+                    bottomEnd = dimensionResource(id = R.dimen.shapeLarge)
+                )
+            )
             .background(color = PrimaryBackgroundPink)
             .fillMaxWidth()
-            .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp))
+            .border(
+                BorderStroke(dimensionResource(id = R.dimen.spaceXXXSmall), Color.Black),
+                shape = RoundedCornerShape(
+                    dimensionResource(id = R.dimen.shapeLarge),
+                    dimensionResource(id = R.dimen.shapeLarge)
+                )
+            )
 
     ) {
         Text(
@@ -35,7 +48,7 @@ fun TopText(text:String) {
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.spaceMedium)),
             textAlign = TextAlign.Center
         )
     }

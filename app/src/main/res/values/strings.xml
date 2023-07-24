@@ -7,4 +7,5 @@
     <string name="tru_fals">True / False</string>
     <string name="multiple_choice">Multiple Choice</string>
     <string name="qa_chalenge"><![CDATA[Q&A Challenge]]></string>
+    <string name="qa">qa</string>
 </resources>

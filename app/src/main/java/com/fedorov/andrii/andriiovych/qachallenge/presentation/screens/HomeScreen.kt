@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,14 +34,19 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp), verticalArrangement = Arrangement.SpaceEvenly
+            .padding(dimensionResource(id = R.dimen.spaceXXMedium)),
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f), contentAlignment = Alignment.Center
         ) {
-            Image(painter = painterResource(id = R.drawable.qa), contentDescription = "qa")
+            Image(
+                painter = painterResource(id = R.drawable.qa), contentDescription = stringResource(
+                    R.string.qa
+                )
+            )
         }
         ButtonWithTextHome(
             buttonText = stringResource(R.string.multiple_choice),
@@ -65,11 +71,11 @@ fun ButtonWithTextHome(
     Button(
         onClick = onButtonClicked,
         colors = ButtonDefaults.buttonColors(backgroundColor = buttonColorState),
-        shape = RoundedCornerShape(25.dp),
-        border = BorderStroke(1.dp, Color.Black),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.shapeMedium)),
+        border = BorderStroke(dimensionResource(id = R.dimen.spaceXXXSmall), Color.Black),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 24.dp)
+            .padding(bottom = dimensionResource(id = R.dimen.spaceXXMedium))
     ) {
         Text(
             text = buttonText,

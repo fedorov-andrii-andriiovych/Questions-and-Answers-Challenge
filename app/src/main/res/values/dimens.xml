@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spaceDefault">0</dimen>
+    <dimen name="spaceXXXSmall">1</dimen>
+    <dimen name="spaceXXSmall">2</dimen>
+    <dimen name="spaceExtraSmall">4</dimen>
+    <dimen name="spaceSmall">8</dimen>
+    <dimen name="spaceMedium">16</dimen>
+    <dimen name="spaceXXMedium">24</dimen>
+    <dimen name="spaceLarge">32</dimen>
+    <dimen name="spaceExtraLarge">64</dimen>
+    <dimen name="spaceXXLarge">128</dimen>
+    <dimen name="spaceXXXLarge">256</dimen>
+
+    <dimen name="shapeDefault">0</dimen>
+    <dimen name="shapeXXSmall">5</dimen>
+    <dimen name="shapeExtraSmall">10</dimen>
+    <dimen name="shapeSmall">15</dimen>
+    <dimen name="shapeMedium">25</dimen>
+    <dimen name="shapeLarge">50</dimen>
+
+</resources>

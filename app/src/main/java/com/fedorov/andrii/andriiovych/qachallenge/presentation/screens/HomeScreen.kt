@@ -14,9 +14,9 @@ import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.Questi
 @Composable
 fun HomeScreen() {
     val mainViewModel: MainViewModel = viewModel()
-    val navController = rememberNavController()
     val multipleViewModel: MultipleViewModel = viewModel()
     val booleanViewModel: BooleanViewModel = viewModel()
+    val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Screens.MAIN.route) {
         composable(Screens.MAIN.route) {
@@ -35,13 +35,13 @@ fun HomeScreen() {
                 onClickCategory = { categoryModel ->
                     when (mainViewModel.typeState.value) {
                         QuestionType.BOOLEAN -> {
+                            booleanViewModel.questionType = QuestionType.BOOLEAN
                             booleanViewModel.categoryState = categoryModel
-                            booleanViewModel.getNewQuestion()
                             navController.navigate(Screens.BOOLEAN_QUIZ.route)
                         }
                         QuestionType.MULTIPLE -> {
+                            multipleViewModel.questionType = QuestionType.MULTIPLE
                             multipleViewModel.categoryState = categoryModel
-                            multipleViewModel.getNewQuestion()
                             navController.navigate(Screens.MULTIPLE_QUIZ.route)
                         }
                         else -> throw IllegalAccessException()

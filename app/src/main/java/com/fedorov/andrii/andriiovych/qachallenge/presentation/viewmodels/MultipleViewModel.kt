@@ -24,11 +24,8 @@ import javax.inject.Inject
 class MultipleViewModel @Inject constructor(
     private val newQuestionUseCase: NewQuestionUseCase,
     private val checkAnswerUseCase: CheckAnswerUseCase,
-) :
-    ViewModel() {
-    private val _screenState =
-        MutableStateFlow<ScreenState<QuestionModel>>(ScreenState.Loading)
-    val screenState: StateFlow<ScreenState<QuestionModel>> = _screenState
+) : BaseQuizViewModel(newQuestionUseCase, checkAnswerUseCase) {
+
     private val _button0ColorState = MutableStateFlow(PrimaryBackgroundPink)
     val button0ColorState: StateFlow<Color> = _button0ColorState
     private val _button1ColorState = MutableStateFlow(PrimaryBackgroundPink)
@@ -37,46 +34,8 @@ class MultipleViewModel @Inject constructor(
     val button2ColorState: StateFlow<Color> = _button2ColorState
     private val _button3ColorState = MutableStateFlow(PrimaryBackgroundPink)
     val button3ColorState: StateFlow<Color> = _button3ColorState
-    private var difficultyState = QuestionDifficulty.ANY
-    var categoryState = CategoryModel()
 
-
-    fun getNewQuestion() = viewModelScope.launch {
-        _screenState.value = ScreenState.Loading
-        val result =
-            newQuestionUseCase.getNewQuestion(
-                QuestionParams(
-                    category = categoryState.id,
-                    type = QuestionType.MULTIPLE.value,
-                    difficulty = difficultyState.value
-                )
-            )
-        when (result) {
-            is ResultOfResponse.Success<QuestionModel> -> _screenState.value =
-                ScreenState.Success(value = result.value)
-            is ResultOfResponse.Failure -> _screenState.value =
-                ScreenState.Failure(message = result.message)
-        }
-    }
-
-    fun checkCorrectAnswer(numberButton: Int) {
-        val questionModel = (screenState.value as ScreenState.Success).value
-        val result = checkAnswerUseCase.checkAnswers(
-            CheckAnswerParams(
-                answers = questionModel.answers,
-                correctAnswer = questionModel.correct_answer,
-                numberButton = numberButton
-            )
-        )
-        val colorState = getColorStateForButton(numberButton)
-        if (result) {
-            correctAnswer(colorState)
-        } else {
-            wrongAnswer(colorState)
-        }
-    }
-
-    private fun getColorStateForButton(numberButton: Int): MutableStateFlow<Color> {
+    override fun getColorStateForButton(numberButton: Int): MutableStateFlow<Color> {
         return when (numberButton) {
             0 -> _button0ColorState
             1 -> _button1ColorState
@@ -86,22 +45,7 @@ class MultipleViewModel @Inject constructor(
         }
     }
 
-    private fun correctAnswer(colorState: MutableStateFlow<Color>) {
-        colorState.value = ButtonBackgroundTrue
-        updateQuestion()
-    }
-
-    private fun wrongAnswer(colorState: MutableStateFlow<Color>) {
-        colorState.value = ButtonBackgroundFalse
-    }
-
-    private fun updateQuestion() = viewModelScope.launch {
-        delay(500)
-        resetButtonColor()
-        getNewQuestion()
-    }
-
-    private fun resetButtonColor() {
+    override fun resetButtonColor() {
         _button0ColorState.value = PrimaryBackgroundPink
         _button1ColorState.value = PrimaryBackgroundPink
         _button2ColorState.value = PrimaryBackgroundPink

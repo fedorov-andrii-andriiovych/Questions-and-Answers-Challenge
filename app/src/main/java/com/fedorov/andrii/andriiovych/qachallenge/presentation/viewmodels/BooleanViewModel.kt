@@ -23,54 +23,14 @@ import javax.inject.Inject
 class BooleanViewModel @Inject constructor(
     private val newQuestionUseCase: NewQuestionUseCase,
     private val checkAnswerUseCase: CheckAnswerUseCase,
-) :
-    ViewModel() {
-    private val _screenState =
-        MutableStateFlow<ScreenState<QuestionModel>>(ScreenState.Loading)
-    val screenState: StateFlow<ScreenState<QuestionModel>> = _screenState
+) : BaseQuizViewModel(newQuestionUseCase, checkAnswerUseCase){
+
     private val _buttonTrueColorState = MutableStateFlow(PrimaryBackgroundPink)
     val buttonTrueColorState: StateFlow<Color> = _buttonTrueColorState
     private val _buttonFalseColorState = MutableStateFlow(PrimaryBackgroundPink)
     val buttonFalseColorState: StateFlow<Color> = _buttonFalseColorState
-    private var difficultyState = QuestionDifficulty.ANY
 
-    var categoryState = CategoryModel()
-    fun getNewQuestion() = viewModelScope.launch {
-        _screenState.value = ScreenState.Loading
-        val result =
-            newQuestionUseCase.getNewQuestion(
-                QuestionParams(
-                    category = categoryState.id,
-                    type = QuestionType.BOOLEAN.value,
-                    difficulty = difficultyState.value
-                )
-            )
-        when (result) {
-            is ResultOfResponse.Success<QuestionModel> -> _screenState.value =
-                ScreenState.Success(value = result.value)
-            is ResultOfResponse.Failure -> _screenState.value =
-                ScreenState.Failure(message = result.message)
-        }
-    }
-
-    fun checkCorrectAnswer(numberButton: Int) {
-        val questionModel = (screenState.value as ScreenState.Success).value
-        val result = checkAnswerUseCase.checkAnswers(
-            CheckAnswerParams(
-                answers = questionModel.answers,
-                correctAnswer = questionModel.correct_answer,
-                numberButton = numberButton
-            )
-        )
-        val colorState = getColorStateForButton(numberButton)
-        if (result) {
-            correctAnswer(colorState)
-        } else {
-            wrongAnswer(colorState)
-        }
-    }
-
-    private fun getColorStateForButton(numberButton: Int): MutableStateFlow<Color> {
+    override fun getColorStateForButton(numberButton: Int): MutableStateFlow<Color> {
         return when (numberButton) {
             0 -> _buttonTrueColorState
             1 -> _buttonFalseColorState
@@ -78,22 +38,7 @@ class BooleanViewModel @Inject constructor(
         }
     }
 
-    private fun correctAnswer(colorState: MutableStateFlow<Color>) {
-        colorState.value = ButtonBackgroundTrue
-        updateQuestion()
-    }
-
-    private fun wrongAnswer(colorState: MutableStateFlow<Color>) {
-        colorState.value = ButtonBackgroundFalse
-    }
-
-    private fun updateQuestion() = viewModelScope.launch {
-        delay(500)
-        resetButtonColor()
-        getNewQuestion()
-    }
-
-    private fun resetButtonColor() {
+    override fun resetButtonColor() {
         _buttonTrueColorState.value = PrimaryBackgroundPink
         _buttonFalseColorState.value = PrimaryBackgroundPink
     }

@@ -24,62 +24,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel: MainViewModel = viewModel()
-            val navController = rememberNavController()
-            val multipleViewModel: MultipleViewModel = viewModel()
-            val booleanViewModel: BooleanViewModel = viewModel()
             QAChallengeTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = PrimaryBackground
                 ) {
-                    NavHost(navController = navController, startDestination = HOME_SCREEN) {
-                        composable(HOME_SCREEN) {
-                            HomeScreen(Modifier, viewModel, onClickType = {questionType->
-                                viewModel.typeState.value = questionType
-                                navController.navigate(CATEGORY_SCREEN)
-                            })
-                        }
-                        composable(CATEGORY_SCREEN) {
-                            CategoryScreen(Modifier, viewModel, onClickCategory = {categoryModel->
-                                when (viewModel.typeState.value) {
-                                    QuestionType.BOOLEAN -> {
-                                        booleanViewModel.categoryState = categoryModel
-                                        booleanViewModel.getNewQuestion()
-                                        navController.navigate(BOOLEAN_QUIZ_SCREEN)
-                                    }
-                                    QuestionType.MULTIPLE -> {
-                                        multipleViewModel.categoryState = categoryModel
-                                        multipleViewModel.getNewQuestion()
-                                        navController.navigate(MULTIPLE_QUIZ_SCREEN)
-                                    }
-                                    else -> throw IllegalAccessException()
-                                }
-
-                            })
-                        }
-                        composable(BOOLEAN_QUIZ_SCREEN) {
-                            BooleanQuizScreen(
-                                booleanViewModel = booleanViewModel,
-                                modifier = Modifier
-                            )
-                        }
-                        composable(MULTIPLE_QUIZ_SCREEN) {
-                            MultipleQuizScreen(
-                                multipleViewModel = multipleViewModel,
-                                modifier = Modifier
-                            )
-                        }
-                    }
+                    HomeScreen()
                 }
             }
         }
-    }
-
-    companion object {
-        const val HOME_SCREEN = "homeScreen"
-        const val CATEGORY_SCREEN = "categoryScreen"
-        const val MULTIPLE_QUIZ_SCREEN = "multipleQuizScreen"
-        const val BOOLEAN_QUIZ_SCREEN = "booleanQuizScreen"
     }
 }

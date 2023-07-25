@@ -51,11 +51,4 @@ class MultipleViewModel @Inject constructor(
         _button2ColorState.value = PrimaryBackgroundPink
         _button3ColorState.value = PrimaryBackgroundPink
     }
-
-    companion object {
-        const val BUTTON_0 = 0
-        const val BUTTON_1 = 1
-        const val BUTTON_2 = 2
-        const val BUTTON_3 = 3
-    }
 }

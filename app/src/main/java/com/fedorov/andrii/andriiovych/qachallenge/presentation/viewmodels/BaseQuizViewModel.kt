@@ -90,3 +90,10 @@ abstract class BaseQuizViewModel (
 
     abstract fun resetButtonColor()
 }
+
+enum class Buttons( val numberButton: Int){
+    BUTTON_0(0),
+    BUTTON_1(1),
+    BUTTON_2(2),
+    BUTTON_3(3),
+}

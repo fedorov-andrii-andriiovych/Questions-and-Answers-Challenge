@@ -15,11 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.Buttons
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MultipleViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ScreenState
 
@@ -36,10 +36,10 @@ fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier)
             val questionModel = (screenState as ScreenState.Success<QuestionModel>).value
             MultipleSuccessScreen(
                 questionModel = questionModel,
-                onButton_0_Clicked = { multipleViewModel.checkCorrectAnswer(MultipleViewModel.BUTTON_0) },
-                onButton_1_Clicked = { multipleViewModel.checkCorrectAnswer(MultipleViewModel.BUTTON_1) },
-                onButton_2_Clicked = { multipleViewModel.checkCorrectAnswer(MultipleViewModel.BUTTON_2) },
-                onButton_3_Clicked = { multipleViewModel.checkCorrectAnswer(MultipleViewModel.BUTTON_3) },
+                onButton_0_Clicked = { multipleViewModel.checkCorrectAnswer(Buttons.BUTTON_0.numberButton) },
+                onButton_1_Clicked = { multipleViewModel.checkCorrectAnswer(Buttons.BUTTON_1.numberButton) },
+                onButton_2_Clicked = { multipleViewModel.checkCorrectAnswer(Buttons.BUTTON_2.numberButton) },
+                onButton_3_Clicked = { multipleViewModel.checkCorrectAnswer(Buttons.BUTTON_3.numberButton) },
                 button_0_ColorState = button0ColorState,
                 button_1_ColorState = button1ColorState,
                 button_2_ColorState = button2ColorState,

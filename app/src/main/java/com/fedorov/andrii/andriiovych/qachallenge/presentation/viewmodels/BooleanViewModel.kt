@@ -42,9 +42,4 @@ class BooleanViewModel @Inject constructor(
         _buttonTrueColorState.value = PrimaryBackgroundPink
         _buttonFalseColorState.value = PrimaryBackgroundPink
     }
-
-    companion object {
-        const val FALSE = 1
-        const val TRUE = 0
-    }
 }

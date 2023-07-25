@@ -16,12 +16,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.BooleanViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.Buttons
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ScreenState
 
 @Composable
@@ -34,8 +34,8 @@ fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
             val questionModel = (screenState as ScreenState.Success<QuestionModel>).value
             BooleanSuccessScreen(
                 questionModel = questionModel,
-                onTrueClicked = { booleanViewModel.checkCorrectAnswer(BooleanViewModel.TRUE) },
-                onFalseClicked = { booleanViewModel.checkCorrectAnswer(BooleanViewModel.FALSE) },
+                onTrueClicked = { booleanViewModel.checkCorrectAnswer(Buttons.BUTTON_0.numberButton) },
+                onFalseClicked = { booleanViewModel.checkCorrectAnswer(Buttons.BUTTON_1.numberButton) },
                 buttonTrueColorState,
                 buttonFalseColorState
             )

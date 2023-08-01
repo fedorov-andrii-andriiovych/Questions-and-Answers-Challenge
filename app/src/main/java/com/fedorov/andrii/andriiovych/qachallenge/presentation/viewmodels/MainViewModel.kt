@@ -11,28 +11,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class ScreenState<out T> {
-    data class Success<out R>(val value: R) : ScreenState<R>()
-    data class Failure(
-        val message: String,
-    ) : ScreenState<Nothing>()
-
-    object Loading : ScreenState<Nothing>()
-}
-
-enum class QuestionType(val value: String) {
-    MULTIPLE("multiple"),
-    BOOLEAN("boolean"),
-    ANY("")
-}
-
-enum class QuestionDifficulty(val value: String) {
-    EASY("easy"),
-    MEDIUM("medium"),
-    HARD("hard"),
-    ANY("")
-}
-
 @HiltViewModel
 class MainViewModel @Inject constructor(private val newTokenUseCase: NewTokenUseCase) :
     ViewModel() {

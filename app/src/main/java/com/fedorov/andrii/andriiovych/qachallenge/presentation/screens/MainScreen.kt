@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MainViewModel
@@ -26,7 +27,7 @@ import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 @Composable
 fun MainScreen(
     modifier: Modifier,
-    mainViewModel: MainViewModel,
+    mainViewModel: MainViewModel = hiltViewModel(),
     onClickType: (QuestionType) -> Unit
 ) {
     TopText(text = stringResource(R.string.qa_chalenge))

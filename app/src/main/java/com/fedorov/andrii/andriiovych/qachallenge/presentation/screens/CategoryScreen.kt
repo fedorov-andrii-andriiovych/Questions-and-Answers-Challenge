@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.R
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
@@ -30,7 +31,7 @@ import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 @Composable
 fun CategoryScreen(
     modifier: Modifier,
-    mainViewModel: MainViewModel,
+    mainViewModel: MainViewModel= hiltViewModel(),
     onClickCategory: (CategoryModel) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {

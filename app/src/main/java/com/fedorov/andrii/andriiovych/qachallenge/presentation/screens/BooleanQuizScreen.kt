@@ -7,6 +7,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -17,15 +18,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.R
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.BooleanViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.Buttons
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.QuestionType
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ScreenState
 
 @Composable
-fun BooleanQuizScreen(booleanViewModel: BooleanViewModel, modifier: Modifier) {
+fun BooleanQuizScreen(
+    booleanViewModel: BooleanViewModel = hiltViewModel(),
+    modifier: Modifier,
+    category: CategoryModel
+) {
+    LaunchedEffect(Unit) {
+        booleanViewModel.questionType = QuestionType.BOOLEAN
+        booleanViewModel.categoryState = category
+        booleanViewModel.getNewQuestion()
+    }
     val screenState by booleanViewModel.screenState.collectAsState()
     val buttonTrueColorState by booleanViewModel.buttonTrueColorState.collectAsState()
     val buttonFalseColorState by booleanViewModel.buttonFalseColorState.collectAsState()

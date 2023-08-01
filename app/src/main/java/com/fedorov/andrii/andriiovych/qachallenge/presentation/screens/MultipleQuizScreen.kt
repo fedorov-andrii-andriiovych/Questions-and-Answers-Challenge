@@ -7,6 +7,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -16,15 +17,27 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.R
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.Buttons
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MultipleViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.QuestionType
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.ScreenState
 
 @Composable
-fun MultipleQuizScreen(multipleViewModel: MultipleViewModel, modifier: Modifier) {
+fun MultipleQuizScreen(
+    multipleViewModel: MultipleViewModel = hiltViewModel(),
+    modifier: Modifier,
+    category: CategoryModel
+) {
+    LaunchedEffect(Unit) {
+        multipleViewModel.questionType = QuestionType.MULTIPLE
+        multipleViewModel.categoryState = category
+        multipleViewModel.getNewQuestion()
+    }
     val screenState by multipleViewModel.screenState.collectAsState()
     val button0ColorState by multipleViewModel.button0ColorState.collectAsState()
     val button1ColorState by multipleViewModel.button1ColorState.collectAsState()

@@ -1,5 +1,6 @@
 package com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels
 
+import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 abstract class BaseQuizViewModel (
     private val newQuestionUseCase: NewQuestionUseCase,
@@ -31,10 +33,6 @@ abstract class BaseQuizViewModel (
     var questionType = QuestionType.ANY
 
     var categoryState = CategoryModel()
-        set(value) {
-            field = value
-            getNewQuestion()
-        }
 
     fun getNewQuestion() = viewModelScope.launch {
         _screenState.value = ScreenState.Loading
@@ -89,6 +87,28 @@ abstract class BaseQuizViewModel (
     }
 
     abstract fun resetButtonColor()
+}
+
+sealed class ScreenState<out T> {
+    data class Success<out R>(val value: R) : ScreenState<R>()
+    data class Failure(
+        val message: String,
+    ) : ScreenState<Nothing>()
+
+    object Loading : ScreenState<Nothing>()
+}
+@Parcelize
+enum class QuestionType(val value: String) : Parcelable {
+    MULTIPLE("multiple"),
+    BOOLEAN("boolean"),
+    ANY("")
+}
+
+enum class QuestionDifficulty(val value: String) {
+    EASY("easy"),
+    MEDIUM("medium"),
+    HARD("hard"),
+    ANY("")
 }
 
 enum class Buttons( val numberButton: Int){

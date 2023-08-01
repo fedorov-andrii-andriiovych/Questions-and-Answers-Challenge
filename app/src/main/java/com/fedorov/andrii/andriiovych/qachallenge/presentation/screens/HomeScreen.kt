@@ -1,63 +1,65 @@
 package com.fedorov.andrii.andriiovych.qachallenge.presentation.screens
 
+import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.core.net.toUri
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.BooleanViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MainViewModel
-import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.MultipleViewModel
+import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels.QuestionType
+
+private const val TYPE = "type"
+private const val CATEGORY = "category"
 
 @Composable
 fun HomeScreen() {
-    val mainViewModel: MainViewModel = viewModel()
-    val multipleViewModel: MultipleViewModel = viewModel()
-    val booleanViewModel: BooleanViewModel = viewModel()
     val navController = rememberNavController()
-
     NavHost(navController = navController, startDestination = Screens.MAIN.route) {
         composable(Screens.MAIN.route) {
             MainScreen(
                 modifier = Modifier,
-                mainViewModel = mainViewModel,
                 onClickType = { questionType ->
-                    mainViewModel.typeState.value = questionType
-                    navController.navigate(Screens.CATEGORY.route)
+                    val bundle = Bundle().apply { putParcelable(TYPE, questionType) }
+                    navController.navigate(Screens.CATEGORY.route, bundle)
                 })
         }
-        composable(Screens.CATEGORY.route) {
+        composable(Screens.CATEGORY.route) { host ->
+            val type = host.arguments?.getParcelable<QuestionType>(TYPE)!!
             CategoryScreen(
                 modifier = Modifier,
-                mainViewModel = mainViewModel,
                 onClickCategory = { categoryModel ->
-                    when (mainViewModel.typeState.value) {
+                    when (type) {
                         QuestionType.BOOLEAN -> {
-                            booleanViewModel.questionType = QuestionType.BOOLEAN
-                            booleanViewModel.categoryState = categoryModel
-                            navController.navigate(Screens.BOOLEAN_QUIZ.route)
+                            val bundle = Bundle().apply {
+                                putParcelable(CATEGORY, categoryModel)
+                            }
+                            navController.navigate(Screens.BOOLEAN_QUIZ.route, bundle)
                         }
                         QuestionType.MULTIPLE -> {
-                            multipleViewModel.questionType = QuestionType.MULTIPLE
-                            multipleViewModel.categoryState = categoryModel
-                            navController.navigate(Screens.MULTIPLE_QUIZ.route)
+                            val bundle = Bundle().apply {
+                                putParcelable(CATEGORY, categoryModel)
+                            }
+                            navController.navigate(Screens.MULTIPLE_QUIZ.route, bundle)
                         }
                         else -> throw IllegalAccessException()
                     }
                 })
         }
-        composable(Screens.BOOLEAN_QUIZ.route) {
+        composable(Screens.BOOLEAN_QUIZ.route) { host ->
+            val category = host.arguments?.getParcelable<CategoryModel>(CATEGORY)!!
             BooleanQuizScreen(
-                booleanViewModel = booleanViewModel,
-                modifier = Modifier
+                modifier = Modifier,
+                category = category
             )
         }
-        composable(Screens.MULTIPLE_QUIZ.route) {
+        composable(Screens.MULTIPLE_QUIZ.route) { host ->
+            val category = host.arguments?.getParcelable<CategoryModel>(CATEGORY)!!
             MultipleQuizScreen(
-                multipleViewModel = multipleViewModel,
-                modifier = Modifier
+                modifier = Modifier,
+                category = category
             )
         }
     }
@@ -68,4 +70,25 @@ enum class Screens(val route: String) {
     CATEGORY("screenFavorites"),
     MULTIPLE_QUIZ("screenSettings"),
     BOOLEAN_QUIZ("screenDetailed")
+}
+
+fun NavController.navigate(
+    route: String,
+    args: Bundle,
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null
+) {
+    val routeLink = NavDeepLinkRequest
+        .Builder
+        .fromUri(NavDestination.createRoute(route).toUri())
+        .build()
+
+    val deepLinkMatch = graph.matchDeepLink(routeLink)
+    if (deepLinkMatch != null) {
+        val destination = deepLinkMatch.destination
+        val id = destination.id
+        navigate(id, args, navOptions, navigatorExtras)
+    } else {
+        navigate(route, navOptions, navigatorExtras)
+    }
 }

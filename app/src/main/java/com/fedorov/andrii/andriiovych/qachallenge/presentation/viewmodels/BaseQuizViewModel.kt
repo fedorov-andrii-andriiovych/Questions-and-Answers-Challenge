@@ -8,7 +8,7 @@ import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CheckAnswerParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
-import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.ResultOfResponse
+import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.Resource
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.CheckAnswerUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
@@ -16,10 +16,11 @@ import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-abstract class BaseQuizViewModel (
+abstract class BaseQuizViewModel(
     private val newQuestionUseCase: NewQuestionUseCase,
     private val checkAnswerUseCase: CheckAnswerUseCase,
 ) : ViewModel() {
@@ -36,19 +37,21 @@ abstract class BaseQuizViewModel (
 
     fun getNewQuestion() = viewModelScope.launch {
         _screenState.value = ScreenState.Loading
-        val result =
-            newQuestionUseCase.getNewQuestion(
-                QuestionParams(
-                    category = categoryState.id,
-                    type = questionType.value,
-                    difficulty = difficultyState.value
-                )
+        newQuestionUseCase.getNewQuestion(
+            QuestionParams(
+                category = categoryState.id,
+                type = questionType.value,
+                difficulty = difficultyState.value
             )
-        when (result) {
-            is ResultOfResponse.Success<QuestionModel> -> _screenState.value =
-                ScreenState.Success(value = result.value)
-            is ResultOfResponse.Failure -> _screenState.value =
-                ScreenState.Failure(message = result.message)
+        ).collectLatest { result ->
+            when (result) {
+                is Resource.Success<QuestionModel> -> _screenState.value =
+                    ScreenState.Success(value = result.value)
+                is Resource.Error -> _screenState.value =
+                    ScreenState.Failure(message = "${result.error.code} ${result.error.message}")
+                is Resource.Exception -> _screenState.value =
+                    ScreenState.Failure(message = result.message)
+            }
         }
     }
 
@@ -69,7 +72,7 @@ abstract class BaseQuizViewModel (
         }
     }
 
-  abstract fun getColorStateForButton(numberButton: Int): MutableStateFlow<Color>
+    abstract fun getColorStateForButton(numberButton: Int): MutableStateFlow<Color>
 
     private fun correctAnswer(colorState: MutableStateFlow<Color>) {
         colorState.value = ButtonBackgroundTrue
@@ -97,6 +100,7 @@ sealed class ScreenState<out T> {
 
     object Loading : ScreenState<Nothing>()
 }
+
 @Parcelize
 enum class QuestionType(val value: String) : Parcelable {
     MULTIPLE("multiple"),
@@ -111,7 +115,7 @@ enum class QuestionDifficulty(val value: String) {
     ANY("")
 }
 
-enum class Buttons( val numberButton: Int){
+enum class Buttons(val numberButton: Int) {
     BUTTON_0(0),
     BUTTON_1(1),
     BUTTON_2(2),

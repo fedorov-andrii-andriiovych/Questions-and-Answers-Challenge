@@ -1,23 +1,12 @@
 package com.fedorov.andrii.andriiovych.qachallenge.presentation.viewmodels
 
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
-import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CheckAnswerParams
-import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
-import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
-import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.ResultOfResponse
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.CheckAnswerUseCase
 import com.fedorov.andrii.andriiovych.qachallenge.domain.usecases.NewQuestionUseCase
-import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundFalse
-import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.ButtonBackgroundTrue
 import com.fedorov.andrii.andriiovych.qachallenge.ui.theme.PrimaryBackgroundPink
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

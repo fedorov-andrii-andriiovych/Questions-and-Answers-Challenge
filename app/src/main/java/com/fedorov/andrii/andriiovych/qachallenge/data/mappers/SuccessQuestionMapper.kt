@@ -3,13 +3,15 @@ package com.fedorov.andrii.andriiovych.qachallenge.data.mappers
 import android.text.Html
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.models.QuestionResponse
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
-import javax.inject.Inject
+import com.skydoves.sandwich.ApiResponse
+import com.skydoves.sandwich.ApiSuccessModelMapper
+import javax.inject.Singleton
 
+@Singleton
+object SuccessQuestionMapper : ApiSuccessModelMapper<QuestionResponse, QuestionModel> {
 
-class QuestionResponseToQuestionModelMapper @Inject constructor():Mapper<QuestionResponse,QuestionModel>{
-
-    override fun mapFrom(from: QuestionResponse): QuestionModel {
-        val questionResponse = from.results[0]
+    override fun map(apiSuccessResponse: ApiResponse.Success<QuestionResponse>): QuestionModel {
+        val questionResponse = apiSuccessResponse.data.results[0]
         val incorrectAnswers = questionResponse.incorrectAnswers.map { decodeHtmlString(it) }
         val correctAnswer = decodeHtmlString(questionResponse.correctAnswer)
         val answers = mutableListOf<String>().apply {

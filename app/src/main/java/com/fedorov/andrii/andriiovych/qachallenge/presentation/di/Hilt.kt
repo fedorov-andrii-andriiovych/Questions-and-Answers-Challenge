@@ -4,6 +4,7 @@ import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.UserToken
 import com.fedorov.andrii.andriiovych.qachallenge.data.repositories.RetrofitNetworkRepositoryImpl
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
+import com.skydoves.sandwich.adapters.ApiResponseCallAdapterFactory
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -36,6 +37,7 @@ object NetworkModule {
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
             .build()
         return retrofit.create(QuestionServices::class.java)
     }

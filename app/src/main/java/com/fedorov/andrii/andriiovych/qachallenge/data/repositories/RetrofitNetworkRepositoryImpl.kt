@@ -1,34 +1,33 @@
 package com.fedorov.andrii.andriiovych.qachallenge.data.repositories
 
-import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.QuestionResponseToQuestionModelMapper
-import com.fedorov.andrii.andriiovych.qachallenge.data.network.NetworkException
+import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.ErrorEnvelopeMapper
+import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.SuccessQuestionMapper
+import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.ThrowableQuestionMapper
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.UserToken
-import com.fedorov.andrii.andriiovych.qachallenge.data.network.models.QuestionResponse
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.NetworkRepository
-import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.ResultOfResponse
+import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.Resource
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.di.IoDispatcher
-import com.google.gson.Gson
+import com.skydoves.sandwich.suspendOnError
+import com.skydoves.sandwich.suspendOnException
+import com.skydoves.sandwich.suspendOnSuccess
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import retrofit2.Response
-import java.net.ConnectException
-import java.net.UnknownHostException
 import javax.inject.Inject
-
-private const val SOMETHING_WENT_WRONG = "Something went wrong, please reload the page"
 
 class RetrofitNetworkRepositoryImpl @Inject constructor(
     private val questionServices: QuestionServices,
     private val userToken: UserToken,
-    private val questionResponseToQuestionModelMapper: QuestionResponseToQuestionModelMapper,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) :
     NetworkRepository {
 
-    override suspend fun getNewToken(): Boolean = withContext(dispatcher){
+    override suspend fun getNewToken(): Boolean = withContext(dispatcher) {
         return@withContext try {
             userToken.token = questionServices.getNewToken().token
             true
@@ -39,45 +38,22 @@ class RetrofitNetworkRepositoryImpl @Inject constructor(
 
     override suspend fun getNewQuestion(
         questionParams: QuestionParams
-    ): ResultOfResponse<QuestionModel> = withContext(dispatcher) {
-        return@withContext try {
-            val result = parseResponse(
-                questionServices.getNewQuestion(
-                    category = questionParams.category,
-                    difficulty = questionParams.difficulty,
-                    type = questionParams.type,
-                    token = userToken.token
-                )
+    ): Flow<Resource<QuestionModel>> {
+        return flow {
+            val response = questionServices.getNewQuestion(
+                category = questionParams.category,
+                difficulty = questionParams.difficulty,
+                type = questionParams.type,
+                token = userToken.token
             )
-            ResultOfResponse.Success(result)
-        } catch (e: UnknownHostException) {
-            ResultOfResponse.Failure(e.message ?: SOMETHING_WENT_WRONG)
-        } catch (e: ConnectException) {
-            ResultOfResponse.Failure(e.message ?: SOMETHING_WENT_WRONG)
-        } catch (e: Exception) {
-            ResultOfResponse.Failure(e.message ?: SOMETHING_WENT_WRONG)
-        }
-    }
+            response.suspendOnSuccess(SuccessQuestionMapper) {
+                emit(Resource.Success(value = this))
+            }.suspendOnError(ErrorEnvelopeMapper) {
+                emit(Resource.Error<QuestionModel>(error = this))
+            }.suspendOnException {
+                emit(Resource.Exception<QuestionModel>(message = ThrowableQuestionMapper.map(this)))
+            }
+        }.flowOn(dispatcher)
 
-    private fun parseResponse(response: Response<QuestionResponse>): QuestionModel {
-        val data: QuestionResponse?
-
-        if (response.isSuccessful)
-            data = response.body()
-        else
-            throw getNetworkException(response)
-
-        if (data != null)
-            return mapData(data)
-        else
-            throw NetworkException(message = SOMETHING_WENT_WRONG)
-    }
-
-    private fun mapData(response: QuestionResponse): QuestionModel {
-        return questionResponseToQuestionModelMapper.mapFrom(from = response)
-    }
-
-    private fun getNetworkException(response: Response<QuestionResponse>): NetworkException {
-        return Gson().fromJson(response.errorBody()!!.charStream(), NetworkException::class.java)
     }
 }

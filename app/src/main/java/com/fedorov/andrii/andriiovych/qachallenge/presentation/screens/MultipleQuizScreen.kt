@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fedorov.andrii.andriiovych.qachallenge.R
+import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.exceptions.message
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
 import com.fedorov.andrii.andriiovych.qachallenge.presentation.screens.uicomponents.TopText
@@ -59,9 +60,10 @@ fun MultipleQuizScreen(
                 button_3_ColorState = button3ColorState
             )
         }
-        is ScreenState.Failure -> {
+        is ScreenState.Error -> {
+            val message = (screenState as ScreenState.Error).value.message()
             FailureScreen(
-                message = (screenState as ScreenState.Failure).message,
+                message = message,
                 onClickRetry = { multipleViewModel.getNewQuestion() })
         }
         is ScreenState.Loading -> {

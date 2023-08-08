@@ -1,6 +1,6 @@
 package com.fedorov.andrii.andriiovych.qachallenge.data.mappers
 
-import com.fedorov.andrii.andriiovych.qachallenge.domain.repositories.ErrorEnvelope
+import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.exceptions.ErrorEnvelope
 import com.skydoves.sandwich.ApiErrorModelMapper
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.message

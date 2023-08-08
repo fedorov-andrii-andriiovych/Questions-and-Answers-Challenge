@@ -66,7 +66,7 @@ class MultipleViewModelTest {
         Mockito.`when`(newQuestionUseCase.getNewQuestion(any())).thenReturn(testData)
 
         multipleViewModel.getNewQuestion()
-        val actual = ScreenState.Failure("test")
+        val actual = ScreenState.Error("test")
         val expected = multipleViewModel.screenState.value
 
         Assertions.assertEquals(expected, actual)

@@ -2,7 +2,7 @@ package com.fedorov.andrii.andriiovych.qachallenge.data.repositories
 
 import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.ErrorEnvelopeMapper
 import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.SuccessQuestionMapper
-import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.ThrowableQuestionMapper
+import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.ThrowableMapper
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.QuestionServices
 import com.fedorov.andrii.andriiovych.qachallenge.data.network.UserToken
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
@@ -51,7 +51,7 @@ class RetrofitNetworkRepositoryImpl @Inject constructor(
             }.suspendOnError(ErrorEnvelopeMapper) {
                 emit(Resource.Error<QuestionModel>(error = this))
             }.suspendOnException {
-                emit(Resource.Exception<QuestionModel>(message = ThrowableQuestionMapper.map(this)))
+                emit(Resource.Exception<QuestionModel>(exception = ThrowableMapper.map(this)))
             }
         }.flowOn(dispatcher)
 

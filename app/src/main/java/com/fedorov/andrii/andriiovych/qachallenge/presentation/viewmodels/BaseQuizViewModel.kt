@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fedorov.andrii.andriiovych.qachallenge.data.mappers.exceptions.BaseException
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CategoryModel
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.CheckAnswerParams
 import com.fedorov.andrii.andriiovych.qachallenge.domain.models.QuestionModel
@@ -48,9 +49,9 @@ abstract class BaseQuizViewModel(
                 is Resource.Success<QuestionModel> -> _screenState.value =
                     ScreenState.Success(value = result.value)
                 is Resource.Error -> _screenState.value =
-                    ScreenState.Failure(message = "${result.error.code} ${result.error.message}")
+                    ScreenState.Error(value = result.error)
                 is Resource.Exception -> _screenState.value =
-                    ScreenState.Failure(message = result.message)
+                    ScreenState.Error(value = result.exception)
             }
         }
     }
@@ -94,10 +95,7 @@ abstract class BaseQuizViewModel(
 
 sealed class ScreenState<out T> {
     data class Success<out R>(val value: R) : ScreenState<R>()
-    data class Failure(
-        val message: String,
-    ) : ScreenState<Nothing>()
-
+    data class Error(val value: BaseException) : ScreenState<Nothing>()
     object Loading : ScreenState<Nothing>()
 }
 

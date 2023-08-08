@@ -63,7 +63,7 @@ class BooleanViewModelTest {
         Mockito.`when`(newQuestionUseCase.getNewQuestion(any())).thenReturn(testData)
 
         booleanViewModel.getNewQuestion()
-        val actual = ScreenState.Failure("test")
+        val actual = ScreenState.Error("test")
         val expected = booleanViewModel.screenState.value
 
         Assertions.assertEquals(expected, actual)
